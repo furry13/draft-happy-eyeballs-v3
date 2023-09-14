@@ -1,0 +1,415 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2023-09-14T00:17:33.830757+00:00",
+  "repo": "tfpauly/draft-happy-eyeballs-v3",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    },
+    {
+      "name": "discuss",
+      "description": "",
+      "color": "F1585F"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOKH7CuM5uzFi6",
+      "title": "Retransmissions and next connection attempt timing",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/1",
+      "state": "OPEN",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Should the first SYN retransmission and next connection attempt happen at the same time?\r\ni.e. If we attempt to connect to address A, should retransmitting to address A happen at the same time as attempting to connect to address B (the next address in the list)?\r\n\r\nIf we have packet loss in the network, that would probably exacerbate the problem. Maybe we should use packet pacing or some kind of delay between them?",
+      "createdAt": "2023-08-21T08:37:04Z",
+      "updatedAt": "2023-09-05T22:21:50Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "Interesting point! It may be good to discuss some jitter. It is already described as approximate, but that doesn't avoid the problem you bring up.\r\n\r\n> Note that this algorithm should only try to approximate the time of the first SYN retransmission\r\n\r\nOne challenge is, of course, that the layer doing happy eyeballs may not directly know when the SYN retransmission will occur.",
+          "createdAt": "2023-08-21T15:19:29Z",
+          "updatedAt": "2023-08-21T15:19:29Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The rationale behind that choice was that both of them are sent when we believe the first SYN (or the corresponding SYN-ACK) to have been lost. We could tweak that logic to avoid having the new SYN and old SYN retransmission to go out to close to one another, but then we have to pick which goes first and an amount to delay the second one. I think sending the old SYN retransmission first makes the most sense, but I'm not sure how to come up with the delay.",
+          "createdAt": "2023-08-21T19:36:08Z",
+          "updatedAt": "2023-08-21T19:36:08Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "I was testing our implementation currently, and I see that we send out the happy eyeballs race attempt well ahead of the SYN retransmission currently \u2014 so it's the opposite of the delay that @DavidSchinazi mentioned here. Something to look deeper into.",
+          "createdAt": "2023-09-05T22:21:50Z",
+          "updatedAt": "2023-09-05T22:21:50Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOKH7CuM5uzFzm",
+      "title": "Sorting algorithm with SVCB/HTTPS RR",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/2",
+      "state": "OPEN",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "nidhijaju"
+      ],
+      "labels": [],
+      "body": "We should add text about the sorting algorithm incorporating SVCB/HTTPS RR.\r\n\r\nOne option (that an existing implementation has already been using) is to prefer addresses received in hints or resolved via service names on SVCB/HTTPS records over direct A and AAAA responses, and sort the SVCB/HTTPS derived addresses based on their priority.",
+      "createdAt": "2023-08-21T08:37:31Z",
+      "updatedAt": "2023-09-05T22:15:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "Right. I think the hints in SVCB should be the same as the A/AAAA derived from SVCB, but our implementation does prefer any SVCB-based (hint or query) address over the \"plain\" A/AAAA answers.",
+          "createdAt": "2023-08-21T15:20:34Z",
+          "updatedAt": "2023-08-21T15:20:34Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "+1 we should specify how to do this - that way all clients will have the same preference, allowing servers to rely on it.",
+          "createdAt": "2023-08-21T19:37:21Z",
+          "updatedAt": "2023-08-21T19:37:21Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "(This ends up updating the current section 5)",
+          "createdAt": "2023-09-05T22:09:57Z",
+          "updatedAt": "2023-09-05T22:09:57Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOKH7CuM5u3cMM",
+      "title": "Specify when and how to request SVCB/HTTP RRs",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/3",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [
+        "discuss"
+      ],
+      "body": "My initial proposal here is:\r\n\r\n- Request HTTPS records for any case where the port is 443 or 80, or the URL has a scheme of http:// or https://\r\n- Request the HTTPS record in parallel with A and AAAA",
+      "createdAt": "2023-08-21T19:44:13Z",
+      "updatedAt": "2023-09-13T14:25:43Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> * Request HTTPS records for any case where the port is 443 or 80\r\n\r\nThis part I'm not convinced about. It's possible to run non-HTTP(S) protocols on those ports\r\n\r\n> or the URL has a scheme of http:// or https://\r\n\r\nThis part I agree with. Though I'd phrase it as \"application will use HTTP(S)\" instead of mentioning the URL - semantically you can create an HTTP connection without having an URL in mind.\r\n\r\n> * Request the HTTPS record in parallel with A and AAAA\r\n\r\nDefinitely agree\r\n",
+          "createdAt": "2023-08-21T19:49:13Z",
+          "updatedAt": "2023-08-21T19:49:13Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "(This ends up updating the current section 4)",
+          "createdAt": "2023-09-05T22:10:12Z",
+          "updatedAt": "2023-09-05T22:10:12Z"
+        },
+        {
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> This part I agree with. Though I'd phrase it as \"application will use HTTP(S)\" instead of mentioning the URL - semantically you can create an HTTP connection without having an URL in mind.\r\n\r\n\"application will use HTTP(S) or WebSocket\" (`ws://` and `wss://`) ?",
+          "createdAt": "2023-09-13T06:58:29Z",
+          "updatedAt": "2023-09-13T06:58:29Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "Yes, web socket too",
+          "createdAt": "2023-09-13T14:25:43Z",
+          "updatedAt": "2023-09-13T14:25:43Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOKH7CuM5u3cU1",
+      "title": "Describe impact of SVCB on resolution delay",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/4",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Our implementation currently does:\r\n\r\n- Have the 50ms default \"Resolution Delay\u201d timer apply to waiting for both AAAA and HTTPS/SVCB",
+      "createdAt": "2023-08-21T19:44:39Z",
+      "updatedAt": "2023-09-05T22:17:38Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sounds reasonable",
+          "createdAt": "2023-08-21T19:52:33Z",
+          "updatedAt": "2023-08-21T19:52:33Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOKH7CuM5u3cnG",
+      "title": "Discuss impact of ALPN",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/5",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "bashi"
+      ],
+      "labels": [],
+      "body": "SVCB contains ALPN information, which can change what protocols can be attempted (learning that H3/QUIC is supported, for example). We should consider how much of this to discuss in happy eyeballs.",
+      "createdAt": "2023-08-21T19:45:40Z",
+      "updatedAt": "2023-09-05T22:17:37Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "Note that this can impact the current section 6 on connection attempts",
+          "createdAt": "2023-09-05T22:11:32Z",
+          "updatedAt": "2023-09-05T22:11:32Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOKH7CuM5wORSB",
+      "title": "Discuss impact of ECH",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/6",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "bashi"
+      ],
+      "labels": [],
+      "body": "ECH use can make the client be SVCB-reliant instead of SVCB-optional. At the very least, the algorithm will be impacted by being SVCB-reliant.",
+      "createdAt": "2023-09-05T22:07:35Z",
+      "updatedAt": "2023-09-05T22:17:11Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "Note that this can impact the current section 6 on connection attempts",
+          "createdAt": "2023-09-05T22:11:37Z",
+          "updatedAt": "2023-09-05T22:11:37Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOKH7CuM5wOT75",
+      "title": "Add SVCB to the intro and overview",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/7",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "nidhijaju"
+      ],
+      "labels": [],
+      "body": "Explain what v3 is focused on, and intro SVCB and how it impacts happy eyeballs.",
+      "createdAt": "2023-09-05T22:18:26Z",
+      "updatedAt": "2023-09-05T22:18:37Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 8,
+      "id": "PR_kwDOKH7CuM5Z5YFy",
+      "title": "Add SVCB to the query algorithm",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/8",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #4",
+      "createdAt": "2023-09-08T17:03:21Z",
+      "updatedAt": "2023-09-13T14:26:33Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "bdd120489d779d04fb5ccceddc2b6c1bb8be7e85",
+      "headRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "3e712438948774d7941f7b84a5da69b61eee7f92",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5gd_Ra",
+          "commit": {
+            "abbreviatedOid": "9a01d8a"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Overall LGTM, modulo one main comment inline and a few nits",
+          "createdAt": "2023-09-08T22:44:30Z",
+          "updatedAt": "2023-09-08T22:48:26Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "```suggestion\r\nThe algorithm for acting upon received answers depends on whether the\r\nclient sent out queries for SVCB RRs.\r\n```",
+              "createdAt": "2023-09-08T22:44:30Z",
+              "updatedAt": "2023-09-08T22:48:26Z"
+            },
+            {
+              "originalPosition": 78,
+              "body": "```suggestion\r\nFor both variations of the algorithm, the RECOMMENDED value for\r\n```",
+              "createdAt": "2023-09-08T22:45:46Z",
+              "updatedAt": "2023-09-08T22:48:26Z"
+            },
+            {
+              "originalPosition": 72,
+              "body": "What if the client received an HTTPS RR with a valid v6 address in the ipv6hint? We should be able to start the connection attempt immediately, right?",
+              "createdAt": "2023-09-08T22:47:32Z",
+              "updatedAt": "2023-09-08T22:48:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5geG2o",
+          "commit": {
+            "abbreviatedOid": "3e71243"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-08T23:09:51Z",
+          "updatedAt": "2023-09-08T23:09:51Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "Yes, that's a good point. I'll need to add that nuance \u2014 we indeed do that in our code.",
+              "createdAt": "2023-09-08T23:09:51Z",
+              "updatedAt": "2023-09-08T23:09:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5gx0fr",
+          "commit": {
+            "abbreviatedOid": "3e71243"
+          },
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Looks good to me. Just a clarifying question and some minor comments.",
+          "createdAt": "2023-09-13T04:34:07Z",
+          "updatedAt": "2023-09-13T05:04:13Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\nAAAA and A queries to resolve the service name included in\r\n```\r\n\r\nassuming that the Happy Eyeballs algorithm always queries both records?",
+              "createdAt": "2023-09-13T04:34:08Z",
+              "updatedAt": "2023-09-13T05:04:13Z"
+            },
+            {
+              "originalPosition": 74,
+              "body": "> Once both records are received,\r\n\r\nWhat should happen when the client received a SVCB answer that has a service name other than the original query? Should the client wait for additional AAAA queries?",
+              "createdAt": "2023-09-13T04:56:46Z",
+              "updatedAt": "2023-09-13T05:04:13Z"
+            },
+            {
+              "originalPosition": 77,
+              "body": "Should we also mention a case where A comes first? It was already decribed in the non-SVCB variant, but it may not be clear what the client should do as line 132 says \"The algorithm for acting upon received answers depends on whether the client sent out queries for SVCB RRs.\"",
+              "createdAt": "2023-09-13T05:01:42Z",
+              "updatedAt": "2023-09-13T05:04:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5g1tcG",
+          "commit": {
+            "abbreviatedOid": "3e71243"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-13T14:26:32Z",
+          "updatedAt": "2023-09-13T14:26:33Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "This accounts for the case where the network connectivity to the device is only v4 or only v6",
+              "createdAt": "2023-09-13T14:26:32Z",
+              "updatedAt": "2023-09-13T14:26:33Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
