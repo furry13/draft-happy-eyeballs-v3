@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-09-14T00:17:33.830757+00:00",
+  "timestamp": "2023-09-21T00:17:35.918516+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -248,7 +248,7 @@
       "labels": [],
       "body": "ECH use can make the client be SVCB-reliant instead of SVCB-optional. At the very least, the algorithm will be impacted by being SVCB-reliant.",
       "createdAt": "2023-09-05T22:07:35Z",
-      "updatedAt": "2023-09-05T22:17:11Z",
+      "updatedAt": "2023-09-20T15:49:10Z",
       "closedAt": null,
       "comments": [
         {
@@ -257,6 +257,20 @@
           "body": "Note that this can impact the current section 6 on connection attempts",
           "createdAt": "2023-09-05T22:11:37Z",
           "updatedAt": "2023-09-05T22:11:37Z"
+        },
+        {
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Suppose that the default server of www.example.com doesn\u2019t support ECH, but it has an alternative endpoint at svc1.example.net that supports ECH.\r\n\r\n    www.example.com.  3600 IN SVCB 1 svc1.example.net. ech=\"...\"\r\n    www.example.com.  3600 IN    A 192.0.2.2\r\n    www.example.com.  3600 IN AAAA 2001:db8::2\r\n    \r\n    svc1.example.net. 3600 IN SVCB 1 . ipv4hint=192.0.2.3 ipv6hint=2001:db8::3\r\n    svc1.example.net. 3600 IN    A 192.0.2.3\r\n    svc1.example.net. 3600 IN AAAA 2001:db8::3\r\n\r\nAn ECH-capable client issues A, AAAA and SVCB queries in paralell. If the client receives response(s) for A and/or AAAA before SVCB, the client can take two approaches:\r\n\r\n- Speculatively start connection attempts first (after the \"Resolution Delay\", if A resolved first) and wait for a SVCB response. If the SVCB record contains \u201cech\u201d, abandon any connections using the addresses from A/AAAA for www.example.com. The client should not finish the algorithm until a SVCB is received, even when one of connection attempts succeeds.\r\n- Wait for a SVCB response before starting connection attempts. If the response contains \u201cech\u201d, modify the sorted list to remove addresses came from A/AAAA for www.example.com.\r\n\r\nIn both cases, the client handles SVCB resolution failures including timeout. The client may treat SVCB resolution failures as fatal or nonfatal.\r\n\r\nI think we want to start connection attempts speculatively. Thoughts?\r\n",
+          "createdAt": "2023-09-20T06:34:45Z",
+          "updatedAt": "2023-09-20T06:45:44Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "That depends on priorities: if the user (or user agent) cares more about privacy, speculatively starting connection attempts will leak the TLS ClientHello, whereas waiting would have provided ECH keys. If the user (or user agent) cares more about performance, than starting speculatively will save time. I could imagine a browser doing speculative connection attempts in general but disabling them in incognito mode for example.",
+          "createdAt": "2023-09-20T15:49:10Z",
+          "updatedAt": "2023-09-20T15:49:10Z"
         }
       ]
     },
@@ -406,6 +420,77 @@
               "body": "This accounts for the case where the network connectivity to the device is only v4 or only v6",
               "createdAt": "2023-09-13T14:26:32Z",
               "updatedAt": "2023-09-13T14:26:33Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOKH7CuM5aolNY",
+      "title": "Rough draft of changes",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/9",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Scoping in the changes roughly, for internal review",
+      "createdAt": "2023-09-19T03:31:22Z",
+      "updatedAt": "2023-09-19T20:46:43Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "bdd120489d779d04fb5ccceddc2b6c1bb8be7e85",
+      "headRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "headRefName": "tfpauly-rough-draft",
+      "headRefOid": "d6153d808206a94768d62e1a99d0217969620e45",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5hZvJw",
+          "commit": {
+            "abbreviatedOid": "d6153d8"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-19T20:26:35Z",
+          "updatedAt": "2023-09-19T20:46:43Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "```suggestion\r\nreceiving an SVCB answer, the client might need to issue further\r\n```",
+              "createdAt": "2023-09-19T20:26:35Z",
+              "updatedAt": "2023-09-19T20:46:43Z"
+            },
+            {
+              "originalPosition": 19,
+              "body": "The RR initialism is already defined further up\r\n```suggestion\r\nRRs {{SVCB}}, it\r\n```",
+              "createdAt": "2023-09-19T20:27:03Z",
+              "updatedAt": "2023-09-19T20:46:43Z"
+            },
+            {
+              "originalPosition": 84,
+              "body": "[ I vaguely remember asking this before, but don't remember the response - was it somewhere else? ]\r\n\r\nWhat about the case where the first response is an HTTPS RR that contains v6 address hints?",
+              "createdAt": "2023-09-19T20:30:12Z",
+              "updatedAt": "2023-09-19T20:46:43Z"
+            },
+            {
+              "originalPosition": 108,
+              "body": "Saying \"first\" and \"next\" is unclear here, does the second sort override the first one? Perhaps: first sort by priority, and then, within each group at equal priority, apply 6724",
+              "createdAt": "2023-09-19T20:41:37Z",
+              "updatedAt": "2023-09-19T20:46:43Z"
+            },
+            {
+              "originalPosition": 128,
+              "body": "As above, phrasing sorting as a \"first then that\" here is ambiguous, we should phrase this in terms of precedence or some other way of communicating which sorting beats the other one",
+              "createdAt": "2023-09-19T20:42:05Z",
+              "updatedAt": "2023-09-19T20:46:43Z"
             }
           ]
         }
