@@ -199,10 +199,11 @@ Table of Contents
 
    *  If the client receives any positive response back (containing a
       valid AAAA, A, or SVCB RR), it starts the Resolution Delay timer,
-      which is run until both the AAAA and SVCB responses are received.
-      Once both records are received, or the timer expires, the client
-      proceeds with the process of sorting addresses and staggered
-      connection attempts.
+      which is run until both the AAAA and SVCB responses are received,
+      or a SVCB response is received that also includes at least one
+      address in the ipv6hint parameter.  Once both records are
+      received, or the timer expires, the client proceeds with the
+      process of sorting addresses and staggered connection attempts.
 
    For both variations of the algorithm, the RECOMMENDED value for the
    Resolution Delay is 50 milliseconds.

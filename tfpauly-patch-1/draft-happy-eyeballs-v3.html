@@ -1349,7 +1349,9 @@ any IPv4 addresses received so far.<a href="#section-4-6.2.1" class="pilcrow">¶
 <li class="normal" id="section-4-8.1">
           <p id="section-4-8.1.1">If the client receives any positive response back (containing a valid
 AAAA, A, or SVCB RR), it starts the Resolution Delay timer, which
-is run until both the AAAA and SVCB responses are received.
+is run until both the AAAA and SVCB responses are received,
+or a SVCB response is received that also includes at least one
+address in the <code>ipv6hint</code> parameter.
 Once both records are received, or the timer expires, the client
 proceeds with the process of sorting addresses and staggered
 connection attempts.<a href="#section-4-8.1.1" class="pilcrow">¶</a></p>
