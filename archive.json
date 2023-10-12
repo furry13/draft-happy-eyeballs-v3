@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-09-28T00:17:52.517297+00:00",
+  "timestamp": "2023-10-12T00:16:14.204509+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -187,7 +187,7 @@
       "id": "I_kwDOKH7CuM5u3cU1",
       "title": "Describe impact of SVCB on resolution delay",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tfpauly",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -196,8 +196,8 @@
       "labels": [],
       "body": "Our implementation currently does:\r\n\r\n- Have the 50ms default \"Resolution Delay\u201d timer apply to waiting for both AAAA and HTTPS/SVCB",
       "createdAt": "2023-08-21T19:44:39Z",
-      "updatedAt": "2023-09-05T22:17:38Z",
-      "closedAt": null,
+      "updatedAt": "2023-10-10T17:45:43Z",
+      "closedAt": "2023-10-10T17:45:43Z",
       "comments": [
         {
           "author": "DavidSchinazi",
@@ -336,24 +336,26 @@
       "id": "PR_kwDOKH7CuM5Z5YFy",
       "title": "Add SVCB to the query algorithm",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/8",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tfpauly",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Closes #4",
       "createdAt": "2023-09-08T17:03:21Z",
-      "updatedAt": "2023-09-27T07:56:06Z",
+      "updatedAt": "2023-10-10T17:45:42Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "bdd120489d779d04fb5ccceddc2b6c1bb8be7e85",
       "headRepository": "tfpauly/draft-happy-eyeballs-v3",
       "headRefName": "tfpauly-patch-1",
-      "headRefOid": "3e712438948774d7941f7b84a5da69b61eee7f92",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "09fd43f77728a5c2806d663b76f61e70eb4ba4cc",
+      "closedAt": "2023-10-10T17:45:42Z",
+      "mergedAt": "2023-10-10T17:45:42Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "60399432d9afad4190473d2097c7c6cea25a0f86"
+      },
       "comments": [],
       "reviews": [
         {
@@ -574,6 +576,166 @@
               "body": "IIUC, the part about running the Resolution Delay Timer (recommended to be 50ms) addresses that, no?",
               "createdAt": "2023-09-27T07:56:05Z",
               "updatedAt": "2023-09-27T07:56:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5jcoTB",
+          "commit": {
+            "abbreviatedOid": "3e71243"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-10T17:22:07Z",
+          "updatedAt": "2023-10-10T17:22:07Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Yeah I disagreed with them on that... but that's the official style now!",
+              "createdAt": "2023-10-10T17:22:07Z",
+              "updatedAt": "2023-10-10T17:22:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5jcok3",
+          "commit": {
+            "abbreviatedOid": "3e71243"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-10T17:22:51Z",
+          "updatedAt": "2023-10-10T17:22:51Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "We currently wait for 50ms, even without being reliant.",
+              "createdAt": "2023-10-10T17:22:51Z",
+              "updatedAt": "2023-10-10T17:22:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5jcs-Y",
+          "commit": {
+            "abbreviatedOid": "d400de8"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-10T17:33:17Z",
+          "updatedAt": "2023-10-10T17:33:17Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "```suggestion\r\n  is run until both the AAAA and SVCB responses are received,\r\n  or a SVCB response is received that also includes at least one\r\n  address in the `ipv6hint` parameter.\r\n```",
+              "createdAt": "2023-10-10T17:33:17Z",
+              "updatedAt": "2023-10-10T17:33:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5jctEK",
+          "commit": {
+            "abbreviatedOid": "8ac5320"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-10T17:33:32Z",
+          "updatedAt": "2023-10-10T17:33:32Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "Added",
+              "createdAt": "2023-10-10T17:33:32Z",
+              "updatedAt": "2023-10-10T17:33:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5jct8e",
+          "commit": {
+            "abbreviatedOid": "8ac5320"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-10T17:35:51Z",
+          "updatedAt": "2023-10-10T17:35:52Z",
+          "comments": [
+            {
+              "originalPosition": 77,
+              "body": "I think that is handled by saying:\r\n\"If the client receives any positive response back (containing a valid\r\n   AAAA, A, or SVCB RR)\"",
+              "createdAt": "2023-10-10T17:35:52Z",
+              "updatedAt": "2023-10-10T17:35:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5jcv6n",
+          "commit": {
+            "abbreviatedOid": "8ac5320"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-10T17:41:15Z",
+          "updatedAt": "2023-10-10T17:41:16Z",
+          "comments": [
+            {
+              "originalPosition": 71,
+              "body": "```suggestion\r\n  AAAA, A, or SVCB ServiceMode RR), it starts the Resolution Delay timer, which\r\n```",
+              "createdAt": "2023-10-10T17:41:15Z",
+              "updatedAt": "2023-10-10T17:41:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5jcwHW",
+          "commit": {
+            "abbreviatedOid": "8ac5320"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-10T17:41:47Z",
+          "updatedAt": "2023-10-10T17:41:48Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "```suggestion\r\n  is run until both the AAAA and SVCB ServiceMode responses are received,\r\n```",
+              "createdAt": "2023-10-10T17:41:47Z",
+              "updatedAt": "2023-10-10T17:41:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5jcxJK",
+          "commit": {
+            "abbreviatedOid": "8ac5320"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-10T17:44:20Z",
+          "updatedAt": "2023-10-10T17:44:20Z",
+          "comments": [
+            {
+              "originalPosition": 74,
+              "body": "Updated to clarify that we need to wait for SVCB ServiceMode, which should account for this.",
+              "createdAt": "2023-10-10T17:44:20Z",
+              "updatedAt": "2023-10-10T17:44:20Z"
             }
           ]
         }
