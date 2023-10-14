@@ -4,8 +4,9 @@
 
 Network Working Group                                           T. Pauly
 Internet-Draft                                                     Apple
-Intended status: Informational                           10 October 2023
-Expires: 12 April 2024
+Intended status: Informational                                   N. Jaju
+Expires: 16 April 2024                                            Google
+                                                         14 October 2023
 
 
     Happy Eyeballs Version 3: Better Connectivity Using Concurrency
@@ -51,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 April 2024.
+   This Internet-Draft will expire on 16 April 2024.
 
 Copyright Notice
 
@@ -92,7 +93,7 @@ Table of Contents
      13.1.  Normative References
      13.2.  Informative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -108,8 +109,8 @@ Table of Contents
 
    This document defines the algorithm for "Happy Eyeballs", a technique
    for reducing user-visible delays on dual-stack hosts.  This
-   definition updates the original description in [HEV2], which itself
-   obsoleted [RFC6555].
+   definition updates the description in [HEV2], which itself obsoleted
+   [RFC6555].
 
    The Happy Eyeballs algorithm of racing connections to resolved
    addresses has several stages to avoid delays to the user whenever
@@ -118,6 +119,20 @@ Table of Contents
    client, how to create an ordered list of destination addresses to
    which to attempt connections, and how to race the connection
    attempts.
+
+   As compared to [HEV2], this document adds support for incorporating
+   SVCB / HTTPS resource records (RRs) [SVCB].  SVCB RRs provide
+   alternative endpoints and associated information about protocol
+   support, Encrypted ClientHello [ECH] keys, address hints, among other
+   relevant hints which may help speed up connection establishment and
+   improve user privacy.  Discovering protocol support during
+   resolution, such as for HTTP/3 over QUIC [RFC9114], allows upgrading
+   between protocols on the current connection attempts, instead of
+   waiting for subsequent attempts to use information from other
+   discovery mechanisms such as HTTP Alternative Services [AltSvc].
+   These records can be queried along with A and AAAA records, and the
+   updated algorithm defines how to handle SVCB responses to improve
+   address and protocol selection.
 
 2.  Conventions and Definitions
 
@@ -145,7 +160,12 @@ Table of Contents
    Note that this document assumes that the preference policy for the
    host destination address favors IPv6 over IPv4.  IPv6 has many
    desirable properties designed to be improvements over IPv4 [IPV6].
-   If the host is configured to have a different preference, the
+
+   This document also assumes that the preference policy favors QUIC
+   over TCP.  QUIC only requires one packet to establish a secure
+   connection, making it quicker compared to TCP [QUIC].
+
+   If the host is configured to have different preferences, the
    recommendations in this document can be easily adapted.
 
 4.  Hostname Resolution Query Handling
@@ -529,6 +549,12 @@ Table of Contents
 
 13.1.  Normative References
 
+   [ECH]      Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
+              Encrypted Client Hello", Work in Progress, Internet-Draft,
+              draft-ietf-tls-esni-17, 9 October 2023,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
+              esni-17>.
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -587,6 +613,10 @@ Table of Contents
 
 13.2.  Informative References
 
+   [AltSvc]   Nottingham, M., McManus, P., and J. Reschke, "HTTP
+              Alternative Services", RFC 7838, DOI 10.17487/RFC7838,
+              April 2016, <https://www.rfc-editor.org/rfc/rfc7838>.
+
    [HEV2]     Schinazi, D. and T. Pauly, "Happy Eyeballs Version 2:
               Better Connectivity Using Concurrency", RFC 8305,
               DOI 10.17487/RFC8305, December 2017,
@@ -596,6 +626,11 @@ Table of Contents
               (IPv6) Specification", STD 86, RFC 8200,
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
+
+   [QUIC]     Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
 
    [RFC6555]  Wing, D. and A. Yourtchenko, "Happy Eyeballs: Success with
               Dual-Stack Hosts", RFC 6555, DOI 10.17487/RFC6555, April
@@ -614,6 +649,9 @@ Table of Contents
               RFC 8765, DOI 10.17487/RFC8765, June 2020,
               <https://www.rfc-editor.org/rfc/rfc8765>.
 
+   [RFC9114]  Bishop, M., Ed., "HTTP/3", RFC 9114, DOI 10.17487/RFC9114,
+              June 2022, <https://www.rfc-editor.org/rfc/rfc9114>.
+
 Acknowledgments
 
    The authors thank Dan Wing, Andrew Yourtchenko, and everyone else who
@@ -627,8 +665,13 @@ Acknowledgments
    Strowes, Jinmei Tatuya, Dave Thaler, Joe Touch, and James Woodyatt
    for their input and contributions.
 
-Author's Address
+Authors' Addresses
 
    Tommy Pauly
    Apple
    Email: tpauly@apple.com
+
+
+   Nidhi Jaju
+   Google
+   Email: nidhijaju@google.com

@@ -6,6 +6,7 @@
 <meta content="initial-scale=1.0" name="viewport">
 <title>Happy Eyeballs Version 3: Better Connectivity Using Concurrency</title>
 <meta content="Tommy Pauly" name="author">
+<meta content="Nidhi Jaju" name="author">
 <meta content='
        Many communication protocols operating over the modern Internet use
 hostnames. These often resolve to multiple IP addresses, each of
@@ -1039,8 +1040,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <td class="right">October 2023</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Pauly</td>
-<td class="center">Expires 12 April 2024</td>
+<td class="left">Pauly &amp; Jaju</td>
+<td class="center">Expires 16 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1053,17 +1054,21 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-happy-eyeballs-v3-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-10" class="published">10 October 2023</time>
+<time datetime="2023-10-14" class="published">14 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-12">12 April 2024</time></dd>
-<dt class="label-authors">Author:</dt>
+<dd class="expires"><time datetime="2024-04-16">16 April 2024</time></dd>
+<dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
       <div class="author-name">T. Pauly</div>
 <div class="org">Apple</div>
+</div>
+<div class="author">
+      <div class="author-name">N. Jaju</div>
+<div class="org">Google</div>
 </div>
 </dd>
 </dl>
@@ -1112,7 +1117,7 @@ document updates the algorithm description in RFC 8305.<a href="#section-abstrac
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1219,7 +1224,7 @@ document updates the algorithm description in RFC 8305.<a href="#section-abstrac
             <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1241,7 +1246,7 @@ requirements for algorithms that reduce this user-visible delay and
 provides an example algorithm.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This document defines the algorithm for "Happy Eyeballs", a technique
 for reducing user-visible delays on dual-stack hosts. This
-definition updates the original description in <span>[<a href="#HEV2" class="cite xref">HEV2</a>]</span>, which
+definition updates the description in <span>[<a href="#HEV2" class="cite xref">HEV2</a>]</span>, which
 itself obsoleted <span>[<a href="#RFC6555" class="cite xref">RFC6555</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">The Happy Eyeballs algorithm of racing connections to resolved
 addresses has several stages to avoid delays to the user whenever
@@ -1250,6 +1255,20 @@ how to handle DNS queries when starting a connection on a dual-stack
 client, how to create an ordered list of destination addresses to
 which to attempt connections, and how to race the connection
 attempts.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">As compared to <span>[<a href="#HEV2" class="cite xref">HEV2</a>]</span>, this document adds support for incorporating
+SVCB / HTTPS resource records (RRs)
+<span>[<a href="#SVCB" class="cite xref">SVCB</a>]</span>. SVCB RRs provide alternative
+endpoints and associated information about protocol support, Encrypted
+ClientHello <span>[<a href="#ECH" class="cite xref">ECH</a>]</span> keys, address hints, among
+other relevant hints which may help speed up connection establishment
+and improve user privacy. Discovering protocol support during
+resolution, such as for HTTP/3 over QUIC <span>[<a href="#RFC9114" class="cite xref">RFC9114</a>]</span>, allows
+upgrading between protocols on the current connection attempts,
+instead of waiting for subsequent attempts to use information from
+other discovery mechanisms such as HTTP Alternative Services
+<span>[<a href="#AltSvc" class="cite xref">AltSvc</a>]</span>. These records can be queried along with A and
+AAAA records, and the updated algorithm defines how to handle SVCB
+responses to improve address and protocol selection.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1288,9 +1307,13 @@ distinct phases:<a href="#section-3-1" class="pilcrow">¶</a></p>
       </ol>
 <p id="section-3-3">Note that this document assumes that the preference policy for the
 host destination address favors IPv6 over IPv4. IPv6 has many
-desirable properties designed to be improvements over IPv4 <span>[<a href="#IPV6" class="cite xref">IPV6</a>]</span>.
-If the host is configured to have a different preference, the
-recommendations in this document can be easily adapted.<a href="#section-3-3" class="pilcrow">¶</a></p>
+desirable properties designed to be improvements over IPv4
+<span>[<a href="#IPV6" class="cite xref">IPV6</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">This document also assumes that the preference policy favors QUIC over
+TCP. QUIC only requires one packet to establish a secure connection,
+making it quicker compared to TCP <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">If the host is configured to have different preferences, the
+recommendations in this document can be easily adapted.<a href="#section-3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="query">
@@ -1304,11 +1327,10 @@ AAAA and A DNS queries. Both queries <span class="bcp14">SHOULD</span> be made a
 one another as possible, with the AAAA query made first and
 immediately followed by the A query.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">Additionally, if the client also wants to receive SVCB / HTTPS
-resource records (RRs) <span>[<a href="#SVCB" class="cite xref">SVCB</a>]</span>, it
-<span class="bcp14">SHOULD</span> issue the SVCB query immediately before the AAAA and A
-queries (prioritizing the SVCB query since it can also include
-address hints). If the client has only one of IPv4 or IPv6
-connectivity, it still issues the SVCB query prior to
+resource records (RRs) <span>[<a href="#SVCB" class="cite xref">SVCB</a>]</span>, it <span class="bcp14">SHOULD</span> issue the SVCB query
+immediately before the AAAA and A queries (prioritizing the SVCB query
+since it can also include address hints). If the client has only one
+of IPv4 or IPv6 connectivity, it still issues the SVCB query prior to
 whichever AAAA or A query is appropriate. Note that upon
 receiving a SVCB answer, the client might need to issue futher
 AAAA and/or A queries to resolve the service name included in
@@ -1744,6 +1766,10 @@ addresses.<a href="#section-11-1" class="pilcrow">¶</a></p>
 <a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="ECH">[ECH]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-17</span>, <time datetime="2023-10-09" class="refDate">9 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-17">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-17</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
@@ -1797,6 +1823,10 @@ addresses.<a href="#section-11-1" class="pilcrow">¶</a></p>
 <a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="AltSvc">[AltSvc]</dt>
+        <dd>
+<span class="refAuthor">Nottingham, M.</span>, <span class="refAuthor">McManus, P.</span>, and <span class="refAuthor">J. Reschke</span>, <span class="refTitle">"HTTP Alternative Services"</span>, <span class="seriesInfo">RFC 7838</span>, <span class="seriesInfo">DOI 10.17487/RFC7838</span>, <time datetime="2016-04" class="refDate">April 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7838">https://www.rfc-editor.org/rfc/rfc7838</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="HEV2">[HEV2]</dt>
         <dd>
 <span class="refAuthor">Schinazi, D.</span> and <span class="refAuthor">T. Pauly</span>, <span class="refTitle">"Happy Eyeballs Version 2: Better Connectivity Using Concurrency"</span>, <span class="seriesInfo">RFC 8305</span>, <span class="seriesInfo">DOI 10.17487/RFC8305</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8305">https://www.rfc-editor.org/rfc/rfc8305</a>&gt;</span>. </dd>
@@ -1804,6 +1834,10 @@ addresses.<a href="#section-11-1" class="pilcrow">¶</a></p>
 <dt id="IPV6">[IPV6]</dt>
         <dd>
 <span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="QUIC">[QUIC]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6555">[RFC6555]</dt>
         <dd>
@@ -1818,8 +1852,12 @@ addresses.<a href="#section-11-1" class="pilcrow">¶</a></p>
 <span class="refAuthor">Cheng, Y.</span>, <span class="refAuthor">Chu, J.</span>, <span class="refAuthor">Radhakrishnan, S.</span>, and <span class="refAuthor">A. Jain</span>, <span class="refTitle">"TCP Fast Open"</span>, <span class="seriesInfo">RFC 7413</span>, <span class="seriesInfo">DOI 10.17487/RFC7413</span>, <time datetime="2014-12" class="refDate">December 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7413">https://www.rfc-editor.org/rfc/rfc7413</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8765">[RFC8765]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Pusateri, T.</span> and <span class="refAuthor">S. Cheshire</span>, <span class="refTitle">"DNS Push Notifications"</span>, <span class="seriesInfo">RFC 8765</span>, <span class="seriesInfo">DOI 10.17487/RFC8765</span>, <time datetime="2020-06" class="refDate">June 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8765">https://www.rfc-editor.org/rfc/rfc8765</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9114">[RFC9114]</dt>
+      <dd>
+<span class="refAuthor">Bishop, M., Ed.</span>, <span class="refTitle">"HTTP/3"</span>, <span class="seriesInfo">RFC 9114</span>, <span class="seriesInfo">DOI 10.17487/RFC9114</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9114">https://www.rfc-editor.org/rfc/rfc9114</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1844,8 +1882,8 @@ for their input and contributions.<a href="#appendix-A-1" class="pilcrow">¶</a>
 </div>
 <div id="authors-addresses">
 <section id="appendix-B">
-      <h2 id="name-authors-address">
-<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Tommy Pauly</span></div>
@@ -1853,6 +1891,14 @@ for their input and contributions.<a href="#appendix-A-1" class="pilcrow">¶</a>
 <div class="email">
 <span>Email:</span>
 <a href="mailto:tpauly@apple.com" class="email">tpauly@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Nidhi Jaju</span></div>
+<div dir="auto" class="left"><span class="org">Google</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:nidhijaju@google.com" class="email">nidhijaju@google.com</a>
 </div>
 </address>
 </section>
