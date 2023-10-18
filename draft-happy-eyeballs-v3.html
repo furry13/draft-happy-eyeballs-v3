@@ -7,6 +7,7 @@
 <title>Happy Eyeballs Version 3: Better Connectivity Using Concurrency</title>
 <meta content="Tommy Pauly" name="author">
 <meta content="Nidhi Jaju" name="author">
+<meta content="Kenichi Ishibashi" name="author">
 <meta content='
        Many communication protocols operating over the modern Internet use
 hostnames. These often resolve to multiple IP addresses, each of
@@ -1040,7 +1041,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <td class="right">October 2023</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Pauly &amp; Jaju</td>
+<td class="left">Pauly, et al.</td>
 <td class="center">Expires 20 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
@@ -1068,6 +1069,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </div>
 <div class="author">
       <div class="author-name">N. Jaju</div>
+<div class="org">Google</div>
+</div>
+<div class="author">
+      <div class="author-name">K. Ishibashi</div>
 <div class="org">Google</div>
 </div>
 </dd>
@@ -1173,6 +1178,11 @@ document updates the algorithm description in RFC 8305.<a href="#section-abstrac
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-connection-attempts" class="internal xref">Connection Attempts</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-handling-application-layer-" class="internal xref">Handling Application Layer Protocol Negotiation (ALPN)</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-dns-answer-changes-during-h" class="internal xref">DNS Answer Changes During Happy Eyeballs Connection Setup</a></p>
@@ -1550,6 +1560,36 @@ in the presence of high packet-loss rates. The Connection Attempt
 Delay <span class="bcp14">SHOULD</span> have an upper bound, referred to as the "Maximum
 Connection Attempt Delay". The current recommended value is 2
 seconds.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<div id="handling-application-layer-protocol-negotiation-alpn">
+<section id="section-6.1">
+        <h3 id="name-handling-application-layer-">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-handling-application-layer-" class="section-name selfRef">Handling Application Layer Protocol Negotiation (ALPN)</a>
+        </h3>
+<p id="section-6.1-1">The <code>alpn</code> and <code>no-default-alpn</code> SvcParamKeys in SVCB RRs indicate the
+"SVCB ALPN set," which specifies the underlying transport protocols supported
+by the associated service endpoint. When the client requests SVCB RRs, it
+<span class="bcp14">SHOULD</span> perform the procedure specified in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-svcb-https-12#section-7.1.2" class="relref">Section 7.1.2</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span> to determine
+the underlying transport protocols that both the client and the service endpoint
+support. The client <span class="bcp14">SHOULD NOT</span> attempt to make a connection to a service
+endpoint whose SVCB ALPN set does not contain any protocols that the client
+supports. For example, suppose the client is an HTTP client that only supports
+TCP-based versions such as HTTP/1.1 and HTTP/2, and it receives the following
+HTTPS RR:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-2">
+<pre>
+ example.com. 60 IN HTTPS 1 svc1.example.com. (
+     alpn="h3" no-default-alpn ipv6hint=2001:db8::2 )
+</pre><a href="#section-6.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-3">In this case, attempting a connection to 2001:db8::2 or any other address resolved
+for <code>svc1.example.com</code> would be incorrect because the RR indicates that
+<code>svc1.example.com</code> only supports HTTP/3, based on the ALPN value of "h3".<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">If the client is an HTTP client that supports both Alt-Svc <span>[<a href="#AltSvc" class="cite xref">AltSvc</a>]</span>
+and SVCB (HTTPS) RRs, the client <span class="bcp14">SHOULD</span> ensure that connection attempts are
+consistent with both the Alt-Svc parameters and the SVCB ALPN set, as specified
+in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-svcb-https-12#section-9.3" class="relref">Section 9.3</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span>.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="changes">
@@ -1950,6 +1990,14 @@ for their input and contributions.<a href="#appendix-A-1" class="pilcrow">¶</a>
 <div class="email">
 <span>Email:</span>
 <a href="mailto:nidhijaju@google.com" class="email">nidhijaju@google.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Kenichi Ishibashi</span></div>
+<div dir="auto" class="left"><span class="org">Google</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:bashi@google.com" class="email">bashi@google.com</a>
 </div>
 </address>
 </section>
