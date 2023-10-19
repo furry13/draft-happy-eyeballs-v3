@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-10-17T00:18:22.332259+00:00",
+  "timestamp": "2023-10-19T00:17:59.660433+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -98,7 +98,7 @@
       "id": "I_kwDOKH7CuM5uzFzm",
       "title": "Sorting algorithm with SVCB/HTTPS RR",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nidhijaju",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -107,8 +107,8 @@
       "labels": [],
       "body": "We should add text about the sorting algorithm incorporating SVCB/HTTPS RR.\r\n\r\nOne option (that an existing implementation has already been using) is to prefer addresses received in hints or resolved via service names on SVCB/HTTPS records over direct A and AAAA responses, and sort the SVCB/HTTPS derived addresses based on their priority.",
       "createdAt": "2023-08-21T08:37:31Z",
-      "updatedAt": "2023-09-05T22:15:12Z",
-      "closedAt": null,
+      "updatedAt": "2023-10-18T23:36:35Z",
+      "closedAt": "2023-10-18T23:36:35Z",
       "comments": [
         {
           "author": "tfpauly",
@@ -213,7 +213,7 @@
       "id": "I_kwDOKH7CuM5u3cnG",
       "title": "Discuss impact of ALPN",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tfpauly",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -222,8 +222,8 @@
       "labels": [],
       "body": "SVCB contains ALPN information, which can change what protocols can be attempted (learning that H3/QUIC is supported, for example). We should consider how much of this to discuss in happy eyeballs.",
       "createdAt": "2023-08-21T19:45:40Z",
-      "updatedAt": "2023-09-05T22:17:37Z",
-      "closedAt": null,
+      "updatedAt": "2023-10-18T23:39:31Z",
+      "closedAt": "2023-10-18T23:39:31Z",
       "comments": [
         {
           "author": "tfpauly",
@@ -239,7 +239,7 @@
       "id": "I_kwDOKH7CuM5wORSB",
       "title": "Discuss impact of ECH",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tfpauly",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -248,8 +248,8 @@
       "labels": [],
       "body": "ECH use can make the client be SVCB-reliant instead of SVCB-optional. At the very least, the algorithm will be impacted by being SVCB-reliant.",
       "createdAt": "2023-09-05T22:07:35Z",
-      "updatedAt": "2023-09-26T17:41:33Z",
-      "closedAt": null,
+      "updatedAt": "2023-10-18T23:47:08Z",
+      "closedAt": "2023-10-18T23:47:08Z",
       "comments": [
         {
           "author": "tfpauly",
@@ -983,52 +983,328 @@
       "id": "PR_kwDOKH7CuM5cylLe",
       "title": "Add ALPN handling",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/12",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bashi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #5.",
       "createdAt": "2023-10-14T06:16:47Z",
-      "updatedAt": "2023-10-14T06:17:56Z",
+      "updatedAt": "2023-10-18T23:39:30Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "ed7a3b844237071dcd2c8a2681f1e39a1b076ea7",
       "headRepository": "bashi/draft-happy-eyeballs-v3",
       "headRefName": "alpn",
-      "headRefOid": "84e4636dc4611a687c24f7694903c63a436e1db8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "960faf12b646e468f0e495ee7ddf429f926db3a7",
+      "closedAt": "2023-10-18T23:39:30Z",
+      "mergedAt": "2023-10-18T23:39:30Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "f6e764b539bd00135b352d60ec7866d6304c85f9"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5kf8-U",
+          "commit": {
+            "abbreviatedOid": "84e4636"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2023-10-18T20:36:09Z",
+          "updatedAt": "2023-10-18T20:40:23Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "```suggestion\r\n~~~\r\n example.com. 60 IN HTTPS 1 . alpn=\"h3\" no-default-alpn ipv6hints=2001:db8::2\r\n~~~\r\n```",
+              "createdAt": "2023-10-18T20:36:09Z",
+              "updatedAt": "2023-10-18T20:40:23Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\n{{Section 7.1.2 of SVCB}} to determine the underlying\r\n```",
+              "createdAt": "2023-10-18T20:36:49Z",
+              "updatedAt": "2023-10-18T20:40:23Z"
+            },
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\r\nSHOULD perform the procedure specified in\r\n```",
+              "createdAt": "2023-10-18T20:37:09Z",
+              "updatedAt": "2023-10-18T20:40:23Z"
+            },
+            {
+              "originalPosition": 31,
+              "body": "I don't think this is quite the statement to make \u2014 it's not just the value in the hint, but _anything_ based on the name for that record, which in this case is example.com. Probably we should update the example to have a different name, and replace the `.` with `svc1.example.com`, and then say that the client shouldn't connect to any address for `svc1.example.com`.",
+              "createdAt": "2023-10-18T20:39:08Z",
+              "updatedAt": "2023-10-18T20:40:23Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "```suggestion\r\nin {{Section 9.3 of SVCB}}.\r\n```",
+              "createdAt": "2023-10-18T20:39:30Z",
+              "updatedAt": "2023-10-18T20:40:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5kg8Lp",
+          "commit": {
+            "abbreviatedOid": "84e4636"
+          },
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-18T23:17:34Z",
+          "updatedAt": "2023-10-18T23:17:35Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Updated the example. Does that make sense?",
+              "createdAt": "2023-10-18T23:17:34Z",
+              "updatedAt": "2023-10-18T23:17:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5khB0E",
+          "commit": {
+            "abbreviatedOid": "67bbf4a"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-18T23:38:08Z",
+          "updatedAt": "2023-10-18T23:38:08Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "```suggestion\r\nIn this case, attempting a connection to 2001:db8::2 or any other address resolved\r\nfor `svc1.example.com` would be incorrect because the RR indicates that\r\n`svc1.example.com` only supports HTTP/3, based on the ALPN value of \"h3\".\r\n```",
+              "createdAt": "2023-10-18T23:38:08Z",
+              "updatedAt": "2023-10-18T23:38:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5khB1e",
+          "commit": {
+            "abbreviatedOid": "960faf1"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-10-18T23:38:18Z",
+          "updatedAt": "2023-10-18T23:38:18Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5khB3u",
+          "commit": {
+            "abbreviatedOid": "84e4636"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-18T23:38:32Z",
+          "updatedAt": "2023-10-18T23:38:32Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Yeah! Tweaked wording slightly",
+              "createdAt": "2023-10-18T23:38:32Z",
+              "updatedAt": "2023-10-18T23:38:33Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 13,
       "id": "PR_kwDOKH7CuM5c0qjr",
       "title": "Add a section for connection establishment",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/13",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "bashi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "To discuss how to handle SVCB-reliant clients such as ECH. Fixes #6.",
       "createdAt": "2023-10-15T06:12:45Z",
-      "updatedAt": "2023-10-15T06:12:45Z",
+      "updatedAt": "2023-10-18T23:47:07Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "f6e764b539bd00135b352d60ec7866d6304c85f9",
+      "headRepository": "bashi/draft-happy-eyeballs-v3",
+      "headRefName": "svcb-reliant",
+      "headRefOid": "276b4dd9e6aae465336982d17940a94e065af1a2",
+      "closedAt": "2023-10-18T23:47:07Z",
+      "mergedAt": "2023-10-18T23:47:07Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "a545fee16e0d5b499557ca00417c7dcce12a9fb2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5kf_n5",
+          "commit": {
+            "abbreviatedOid": "6aa4931"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2023-10-18T20:42:21Z",
+          "updatedAt": "2023-10-18T20:51:44Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "```suggestion\r\n({{Section 3 of SVCB}}) when SVCB RRs contain the\r\n```",
+              "createdAt": "2023-10-18T20:42:21Z",
+              "updatedAt": "2023-10-18T20:51:44Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "```suggestion\r\n\"ech\" SvcParamKey {{!ECH=I-D.ietf-tls-svcb-ech}}. If the client is either an SVCB-reliant client or a\r\n```",
+              "createdAt": "2023-10-18T20:43:49Z",
+              "updatedAt": "2023-10-18T20:51:44Z"
+            },
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n## Determining successful connection establishment\r\n```",
+              "createdAt": "2023-10-18T20:45:11Z",
+              "updatedAt": "2023-10-18T20:51:44Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\nThe determination of when a connection attempt has successfully completed\r\n(and other attempts can be cancelled) depends on the protocols being used\r\nto establish a connection. This can involve one or more protocol handshakes.\r\n\r\nClient connections that use TCP only (without TLS or another protocol on top, such\r\nas for unencrypted HTTP connections) will determine successful establishment based\r\non completing the TCP handshake only. When TLS is used on top of of TCP (such\r\nas for encrypted HTTP connections), clients MAY choose to wait for the TLS handshake to\r\nsuccessfully complete before cancelling other connection attempts. This is particularly\r\nuseful for networks in which a TCP-terminating proxy might be causing TCP handshakes\r\nto succeed quickly, even though end-to-end connectivity with the TLS-terminating\r\nserver will fail. QUIC connections inherently include a secure handshake in their main\r\nhandshakes, and thus only need to wait for a single handshake to complete.\r\n```",
+              "createdAt": "2023-10-18T20:51:28Z",
+              "updatedAt": "2023-10-18T20:51:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5khDWu",
+          "commit": {
+            "abbreviatedOid": "276b4dd"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-10-18T23:46:39Z",
+          "updatedAt": "2023-10-18T23:46:39Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOKH7CuM5dKB25",
+      "title": "Update sorting algorithm with SVCB RRs",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/14",
+      "state": "MERGED",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #2",
+      "createdAt": "2023-10-18T15:28:11Z",
+      "updatedAt": "2023-10-18T23:36:35Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "ed7a3b844237071dcd2c8a2681f1e39a1b076ea7",
-      "headRepository": "bashi/draft-happy-eyeballs-v3",
-      "headRefName": "svcb-reliant",
-      "headRefOid": "6aa493114e0c57b369242ca31d4ddd26fbbd62d4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
+      "headRefName": "sorting-algorithm",
+      "headRefOid": "c378a7b224d1bbc9167612bbeec3c98df0deb790",
+      "closedAt": "2023-10-18T23:36:34Z",
+      "mergedAt": "2023-10-18T23:36:34Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "39126c12d8948f678f466cf17688a89778784048"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5kgFQ9",
+          "commit": {
+            "abbreviatedOid": "b7c35f8"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2023-10-18T20:58:22Z",
+          "updatedAt": "2023-10-18T20:58:35Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "The summary a ways below has a definition for \"First Address Family Count\", so we would need to update all references to this.\r\n\r\nAnd I'm not sure about the \"Combination Count\"... how about calling this:\r\n\"Preferred Protocol Attempt Count\" or something??",
+              "createdAt": "2023-10-18T20:58:22Z",
+              "updatedAt": "2023-10-18T20:58:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5kg-tL",
+          "commit": {
+            "abbreviatedOid": "b7c35f8"
+          },
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-18T23:23:59Z",
+          "updatedAt": "2023-10-18T23:23:59Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "\"Preferred Protocol Attempt Count\" mentions protocol but doesn't really imply that it's a combination of protocols and address families. How about calling it something like \"Preferred Protocol Combination Count\" for now and we can always iterate on it? Or is the word \"combination\" not as preferable?",
+              "createdAt": "2023-10-18T23:23:59Z",
+              "updatedAt": "2023-10-18T23:23:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5khA2R",
+          "commit": {
+            "abbreviatedOid": "b7c35f8"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-18T23:31:54Z",
+          "updatedAt": "2023-10-18T23:31:55Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "Yeah \"Preferred Protocol Combination Count\" works for me",
+              "createdAt": "2023-10-18T23:31:54Z",
+              "updatedAt": "2023-10-18T23:31:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5khBiP",
+          "commit": {
+            "abbreviatedOid": "c378a7b"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-10-18T23:36:14Z",
+          "updatedAt": "2023-10-18T23:36:14Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
