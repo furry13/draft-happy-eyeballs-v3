@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-10-19T00:17:59.660433+00:00",
+  "timestamp": "2023-10-22T00:19:53.857856+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -239,7 +239,7 @@
       "id": "I_kwDOKH7CuM5wORSB",
       "title": "Discuss impact of ECH",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/6",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "tfpauly",
       "authorAssociation": "OWNER",
       "assignees": [
@@ -248,8 +248,8 @@
       "labels": [],
       "body": "ECH use can make the client be SVCB-reliant instead of SVCB-optional. At the very least, the algorithm will be impacted by being SVCB-reliant.",
       "createdAt": "2023-09-05T22:07:35Z",
-      "updatedAt": "2023-10-18T23:47:08Z",
-      "closedAt": "2023-10-18T23:47:08Z",
+      "updatedAt": "2023-10-19T05:27:45Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "tfpauly",
@@ -292,6 +292,13 @@
           "body": "Opened #10 to talk about QUIC",
           "createdAt": "2023-09-26T17:41:33Z",
           "updatedAt": "2023-09-26T17:41:33Z"
+        },
+        {
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Based on the above discussion, it seems there are three ways of approaching privacy in Happy Eyeballs with regards to ECH:\r\n1) You care about maximum privacy and wait for ECH keys no matter what before proceeding.\r\n2) You care about performance and privacy, so you start the TCP handshake and then wait for ECH keys until you make TLS/QUIC (with a timeout?).\r\n3) You don't wait for ECH keys and just start attempting connections.\r\n\r\nI think they're kind of implied in https://tfpauly.github.io/draft-happy-eyeballs-v3/draft-happy-eyeballs-v3.html#section-6.1-3, but we don't really talk about the privacy impacts of sending a TCP SYN ahead of receiving a SVCB RR (i.e. additional exposure of IP addresses that you might otherwise have never contacted).\r\n\r\nAlso, wondering if we should talk about a timeout for 2) above.",
+          "createdAt": "2023-10-19T05:27:45Z",
+          "updatedAt": "2023-10-19T05:27:45Z"
         }
       ]
     },
@@ -326,6 +333,22 @@
       "body": "Current doc just talks about TCP \u2014 we should add QUIC considerations in specifically",
       "createdAt": "2023-09-26T17:41:16Z",
       "updatedAt": "2023-09-26T17:41:16Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOKH7CuM50bRiy",
+      "title": "Acknowledgements",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/15",
+      "state": "OPEN",
+      "author": "DavidSchinazi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The Acknowledgements section is currently copy-pasted from HEv2",
+      "createdAt": "2023-10-20T01:12:42Z",
+      "updatedAt": "2023-10-20T01:12:42Z",
       "closedAt": null,
       "comments": []
     }
@@ -1305,6 +1328,119 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOKH7CuM5dWBEA",
+      "title": "Update with QUIC",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/16",
+      "state": "OPEN",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Updates all the mentions of TCP with the relevant QUIC considerations as well.\r\nAddresses #10.",
+      "createdAt": "2023-10-20T05:36:17Z",
+      "updatedAt": "2023-10-20T22:16:53Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "a545fee16e0d5b499557ca00417c7dcce12a9fb2",
+      "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
+      "headRefName": "mention-quic",
+      "headRefOid": "3cb4f172a8872b0e8680b3d01a0438d154a90c8b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5kunYh",
+          "commit": {
+            "abbreviatedOid": "3cb4f17"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "Looks good! A few areas to tweak",
+          "createdAt": "2023-10-20T12:35:19Z",
+          "updatedAt": "2023-10-20T12:38:39Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "I'm not sure it's correct to say that QUIC 0-RTT relies on specific client IPs?",
+              "createdAt": "2023-10-20T12:35:19Z",
+              "updatedAt": "2023-10-20T12:38:39Z"
+            },
+            {
+              "originalPosition": 49,
+              "body": "Should this be \"re-trying its handshake (such as sending a second SYN for TCP or sending a second QUIC Initial)\"",
+              "createdAt": "2023-10-20T12:37:09Z",
+              "updatedAt": "2023-10-20T12:38:39Z"
+            },
+            {
+              "originalPosition": 75,
+              "body": "Maybe say \"at the transport layer (such as TCP or QUIC)\"",
+              "createdAt": "2023-10-20T12:37:54Z",
+              "updatedAt": "2023-10-20T12:38:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5kyfr1",
+          "commit": {
+            "abbreviatedOid": "3cb4f17"
+          },
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Nothing to add other than Tommy's suggestion.",
+          "createdAt": "2023-10-20T22:16:53Z",
+          "updatedAt": "2023-10-20T22:16:53Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDOKH7CuM5dW-6x",
+      "title": "Rephrase TCP related sentences",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/17",
+      "state": "CLOSED",
+      "author": "bashi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In v3, connection establishment doesn't always mean TCP handshake. Rephrase some texts to reflect that.",
+      "createdAt": "2023-10-20T09:02:16Z",
+      "updatedAt": "2023-10-20T10:51:15Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "a545fee16e0d5b499557ca00417c7dcce12a9fb2",
+      "headRepository": "bashi/draft-happy-eyeballs-v3",
+      "headRefName": "tcp-rewording",
+      "headRefOid": "4a697b0a428bfd418d32322e84cb313e60b80188",
+      "closedAt": "2023-10-20T10:51:15Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think #16 may already cover this, comments and suggestions there would be very welcome :)",
+          "createdAt": "2023-10-20T09:27:29Z",
+          "updatedAt": "2023-10-20T09:27:29Z"
+        },
+        {
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I wasn't aware of your PR. I'll take a look at the PR.",
+          "createdAt": "2023-10-20T10:51:15Z",
+          "updatedAt": "2023-10-20T10:51:15Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
