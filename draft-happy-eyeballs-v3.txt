@@ -511,6 +511,9 @@ Table of Contents
    queries; connection attempts follow the algorithm described above
    (see Section 6).
 
+   Such translation also applies to any IPv4 address hints received in
+   SVCB RRs.
+
 8.2.  Hostnames with Broken AAAA Records
 
    At the time of writing, there exist a small but non-negligible number
