@@ -4,9 +4,10 @@
 
 Network Working Group                                           T. Pauly
 Internet-Draft                                                     Apple
-Intended status: Informational                                   N. Jaju
-Expires: 25 April 2024                                      K. Ishibashi
-                                                                  Google
+Intended status: Informational                               D. Schinazi
+Expires: 25 April 2024                                           N. Jaju
+                                                            K. Ishibashi
+                                                              Google LLC
                                                          23 October 2023
 
 
@@ -801,11 +802,16 @@ Authors' Addresses
    Email: tpauly@apple.com
 
 
+   David Schinazi
+   Google LLC
+   Email: dschinazi.ietf@gmail.com
+
+
    Nidhi Jaju
-   Google
+   Google LLC
    Email: nidhijaju@google.com
 
 
    Kenichi Ishibashi
-   Google
+   Google LLC
    Email: bashi@google.com
