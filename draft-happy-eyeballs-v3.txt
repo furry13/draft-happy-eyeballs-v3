@@ -5,9 +5,9 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                     Apple
 Intended status: Informational                                   N. Jaju
-Expires: 20 April 2024                                      K. Ishibashi
+Expires: 25 April 2024                                      K. Ishibashi
                                                                   Google
-                                                         18 October 2023
+                                                         23 October 2023
 
 
     Happy Eyeballs Version 3: Better Connectivity Using Concurrency
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2024.
+   This Internet-Draft will expire on 25 April 2024.
 
 Copyright Notice
 
@@ -363,28 +363,28 @@ Table of Contents
    address is started first, followed by the others in the list, one at
    a time.  Starting a new connection attempt does not affect previous
    attempts, as multiple connection attempts may occur in parallel.
-   Once one of the connection attempts succeeds (generally when the TCP
-   handshake completes), all other connections attempts that have not
-   yet succeeded SHOULD be canceled.  Any address that was not yet
-   attempted as a connection SHOULD be ignored.  At that time, the
-   asynchronous DNS query MAY be canceled as new addresses will not be
-   used for this connection.  However, the DNS client resolver SHOULD
-   still process DNS replies from the network for a short period of time
-   (recommended to be 1 second), as they will populate the DNS cache and
-   can be used for subsequent connections.
+   Once one of the connection attempts succeeds (Section 6.1), all other
+   connections attempts that have not yet succeeded SHOULD be canceled.
+   Any address that was not yet attempted as a connection SHOULD be
+   ignored.  At that time, the asynchronous DNS query MAY be canceled as
+   new addresses will not be used for this connection.  However, the DNS
+   client resolver SHOULD still process DNS replies from the network for
+   a short period of time (recommended to be 1 second), as they will
+   populate the DNS cache and can be used for subsequent connections.
 
    A simple implementation can have a fixed delay for how long to wait
    before starting the next connection attempt.  This delay is referred
    to as the "Connection Attempt Delay".  One recommended value for a
    default delay is 250 milliseconds.  A more nuanced implementation's
    delay should correspond to the time when the previous attempt is
-   sending its second TCP SYN, based on the TCP's retransmission timer
-   [RFC6298].  If the client has historical RTT data gathered from other
-   connections to the same host or prefix, it can use this information
-   to influence its delay.  Note that this algorithm should only try to
-   approximate the time of the first SYN retransmission, and not any
-   further retransmissions that may be influenced by exponential timer
-   back off.
+   retrying its handshake (such as sending a second TCP SYN or a second
+   QUIC Initial), based on the retransmission timer ([RFC6298],
+   [RFC9002]).  If the client has historical RTT data gathered from
+   other connections to the same host or prefix, it can use this
+   information to influence its delay.  Note that this algorithm should
+   only try to approximate the time of the first handshake packet
+   retransmission, and not any further retransmissions that may be
+   influenced by exponential timer back off.
 
    The Connection Attempt Delay MUST have a lower bound, especially if
    it is computed using historical data.  More specifically, a
@@ -613,17 +613,20 @@ Table of Contents
 
 10.  Limitations
 
-   Happy Eyeballs will handle initial connection failures at the TCP/IP
-   layer; however, other failures or performance issues may still affect
-   the chosen connection.
+   Happy Eyeballs will handle initial connection failures at the
+   transport layer (such as TCP or QUIC); however, other failures or
+   performance issues may still affect the chosen connection.
 
 10.1.  Path Maximum Transmission Unit Discovery
 
-   Since Happy Eyeballs is only active during the initial handshake and
-   TCP does not pass the initial handshake, issues related to MTU can be
-   masked and go unnoticed during Happy Eyeballs.  Solving this issue is
-   out of scope of this document.  One solution is to use "Packetization
-   Layer Path MTU Discovery" [RFC4821].
+   For TCP connections, since Happy Eyeballs is only active during the
+   initial handshake and TCP does not pass the initial handshake, issues
+   related to MTU can be masked and go unnoticed during Happy Eyeballs.
+   For QUIC connections, a minimum MTU of at least 1200 bytes [RFC9000],
+   Section 8.1-5 is guaranteed, but there is a chance that larger values
+   may not be available.  Solving this issue is out of scope of this
+   document.  One solution is to use "Packetization Layer Path MTU
+   Discovery" [RFC4821].
 
 10.2.  Application Layer
 
@@ -712,6 +715,11 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
+   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
+
    [SVCB]     Schwartz, B. M., Bishop, M., and E. Nygren, "Service
               binding and parameter specification via the DNS (DNS SVCB
               and HTTPS RRs)", Work in Progress, Internet-Draft, draft-
@@ -762,6 +770,10 @@ Table of Contents
    [RFC8765]  Pusateri, T. and S. Cheshire, "DNS Push Notifications",
               RFC 8765, DOI 10.17487/RFC8765, June 2020,
               <https://www.rfc-editor.org/rfc/rfc8765>.
+
+   [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
+              and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
+              May 2021, <https://www.rfc-editor.org/rfc/rfc9002>.
 
    [RFC9114]  Bishop, M., Ed., "HTTP/3", RFC 9114, DOI 10.17487/RFC9114,
               June 2022, <https://www.rfc-editor.org/rfc/rfc9114>.
