@@ -3,7 +3,7 @@
 
 
 Network Working Group                                           T. Pauly
-Internet-Draft                                                     Apple
+Internet-Draft                                                 Apple Inc
 Intended status: Informational                               D. Schinazi
 Expires: 25 April 2024                                           N. Jaju
                                                             K. Ishibashi
@@ -799,7 +799,7 @@ Acknowledgments
 Authors' Addresses
 
    Tommy Pauly
-   Apple
+   Apple Inc
    Email: tpauly@apple.com
 
 
