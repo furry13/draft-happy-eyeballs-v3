@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-10-22T00:19:53.857856+00:00",
+  "timestamp": "2023-10-24T00:18:14.076437+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -325,15 +325,15 @@
       "id": "I_kwDOKH7CuM5yFUly",
       "title": "Discuss QUIC racing specifically",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tfpauly",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Current doc just talks about TCP \u2014 we should add QUIC considerations in specifically",
       "createdAt": "2023-09-26T17:41:16Z",
-      "updatedAt": "2023-09-26T17:41:16Z",
-      "closedAt": null,
+      "updatedAt": "2023-10-23T15:53:41Z",
+      "closedAt": "2023-10-23T15:53:41Z",
       "comments": []
     },
     {
@@ -1334,24 +1334,26 @@
       "id": "PR_kwDOKH7CuM5dWBEA",
       "title": "Update with QUIC",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/16",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nidhijaju",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Updates all the mentions of TCP with the relevant QUIC considerations as well.\r\nAddresses #10.",
       "createdAt": "2023-10-20T05:36:17Z",
-      "updatedAt": "2023-10-20T22:16:53Z",
+      "updatedAt": "2023-10-23T15:53:40Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "a545fee16e0d5b499557ca00417c7dcce12a9fb2",
       "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
       "headRefName": "mention-quic",
-      "headRefOid": "3cb4f172a8872b0e8680b3d01a0438d154a90c8b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "1a6777ce73eb7d92ef5cf8b87a2717e1cde34115",
+      "closedAt": "2023-10-23T15:53:40Z",
+      "mergedAt": "2023-10-23T15:53:40Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "6cd12988d4f339d71ca987280ce3db40eec2f483"
+      },
       "comments": [],
       "reviews": [
         {
@@ -1398,6 +1400,46 @@
           "createdAt": "2023-10-20T22:16:53Z",
           "updatedAt": "2023-10-20T22:16:53Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5k0Fym",
+          "commit": {
+            "abbreviatedOid": "3cb4f17"
+          },
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-22T06:10:15Z",
+          "updatedAt": "2023-10-22T06:10:16Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Got it, removing for now.",
+              "createdAt": "2023-10-22T06:10:15Z",
+              "updatedAt": "2023-10-22T06:10:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5k6Acw",
+          "commit": {
+            "abbreviatedOid": "33aa6b6"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-23T15:51:56Z",
+          "updatedAt": "2023-10-23T15:51:57Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "```suggestion\r\nonly try to approximate the time of the first handshake packet retransmission, and\r\n```",
+              "createdAt": "2023-10-23T15:51:57Z",
+              "updatedAt": "2023-10-23T15:51:57Z"
+            }
+          ]
         }
       ]
     },
