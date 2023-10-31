@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-10-24T00:18:14.076437+00:00",
+  "timestamp": "2023-10-31T00:18:19.342921+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -349,6 +349,54 @@
       "body": "The Acknowledgements section is currently copy-pasted from HEv2",
       "createdAt": "2023-10-20T01:12:42Z",
       "updatedAt": "2023-10-20T01:12:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 18,
+      "id": "I_kwDOKH7CuM51Ym1T",
+      "title": "Section 8.1: RFC7050 should not be applied to 127.0.0.0/8 and RFC1918 address space?",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18",
+      "state": "OPEN",
+      "author": "momoka0122y",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "### Should synthesis be done to all address spaces?\r\n> If client applications or users wish to connect to IPv4 address\r\n> literals, the Happy Eyeballs engine will need to perform NAT64\r\n> address synthesis for them.\r\n\r\nI wonder if this has been discussed for RFC7050 but should this algorithm\r\nbe applied to 127.0.0.0/8 and RFC1918 address space? Maybe we should\r\ndiscuss if these address spaces should NOT be translated.\r\n\r\nFor the loopback address range (127.0.0.0/8), it should not be translated\r\nas the client in question should have a route to the loopback network\r\nresulting in the synthesis not being needed.\r\n\r\nFor addresses within the RFC1918 space, the translated address could be\r\nmisrouted to an unintended host, diverging from the user's original\r\nintention. Nonetheless, it is worth noting that nothing stops the inclusion\r\nof RFC1918 addresses in DNS records. As a result, translated IPv6 addresses\r\noriginating from RFC1918 space can still be acquired via DNS64. Given this,\r\nit may be counterintuitive to impose restrictions on such addresses in the\r\nHappy Eyeballs algorithm.",
+      "createdAt": "2023-10-30T23:33:21Z",
+      "updatedAt": "2023-10-30T23:33:21Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOKH7CuM51Ym3Y",
+      "title": "Section 8.1: Adding reference to RA PREF64 RFC8781",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/19",
+      "state": "OPEN",
+      "author": "momoka0122y",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "\r\nFrom discussion\r\n\r\n> > the device queries the network for the NAT64 prefix using\r\n> > \"Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis\"\r\n> > [RFC7050] and then\r\n> > Regarding the use of RFC7050 for obtaining the NAT64 prefix, RA Option 38 (as specified in RFC8781) could also serve this purpose. However, given that this section is geared towards platforms not supporting 464XLAT, I assume doing rfc7050 is simpler than getting an RA message for an application so the omission of RFC8781 seems justified.\r\n> \r\n> I think it would be fine to mention to RFC8781. Perhaps you could file an issue on GitHub for that?\r\nhttps://mailarchive.ietf.org/arch/msg/v6ops/2csKJzBti4Mmb5vdWXp4-kzPd1k/\r\n\r\n\r\n```diff\r\n   When an IPv4 address is passed into the library instead of a\r\n   hostname, the device queries the network for the NAT64 prefix using\r\n   \"Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis\"\r\n- [RFC7050] \r\n+ [RFC7050] or PREF64 Router Advertisement option [RFC8781],\r\n   and then synthesizes an appropriate IPv6 address (or\r\n   several) using the encoding described in \"IPv6 Addressing of IPv4/\r\n   IPv6 Translators\" [RFC6052].  The synthesized addresses are then\r\n   inserted into the list of addresses as if they were results from DNS\r\n   queries; connection attempts follow the algorithm described above\r\n   (see Section 6).\r\n```",
+      "createdAt": "2023-10-30T23:33:31Z",
+      "updatedAt": "2023-10-30T23:33:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOKH7CuM51Ym4J",
+      "title": "Section 8.1: When using encrypted DNS translation may also be needed.",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/20",
+      "state": "OPEN",
+      "author": "momoka0122y",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> >   8.1.  IPv4 Address Literals\r\n> >   Such translation also applies to any IPv4 address hints received in SVCB RRs.\r\n> > The mention of SVCB RRs makes this section a lot more meaningful as IP address literals may not have been so common but with SVCB RRS they will be common even in a client/server scenario.\r\n> \r\n> The other case that is common is when you\u2019re using encrypted DNS (DoT/DoH/etc) and asking for both address families. That\u2019s common to then get v4 answers that need to be translated.\r\n\r\nFrom reply from Tommy.\r\nhttps://mailarchive.ietf.org/arch/msg/v6ops/2csKJzBti4Mmb5vdWXp4-kzPd1k/\r\n\r\n\r\nSo maybe\r\n```diff\r\n- Such translation also applies to any IPv4 address hints received in SVCB RRs.\r\n+ Such translation also applies to any IPv4 address hints received in SVCB RRs or when using encrypted DNS (DoT/DoH/etc).\r\n```",
+      "createdAt": "2023-10-30T23:33:34Z",
+      "updatedAt": "2023-10-30T23:33:34Z",
       "closedAt": null,
       "comments": []
     }
