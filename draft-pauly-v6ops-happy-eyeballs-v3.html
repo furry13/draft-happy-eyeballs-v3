@@ -1686,7 +1686,8 @@ Host" <span>[<a href="#RFC6535" class="cite xref">RFC6535</a>]</span> but is imp
 <p id="section-8.1-2">When an IPv4 address is passed into the library instead of a
 hostname, the device queries the network for the NAT64 prefix using
 "Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis"
-<span>[<a href="#RFC7050" class="cite xref">RFC7050</a>]</span> and then synthesizes an appropriate IPv6 address (or
+<span>[<a href="#RFC7050" class="cite xref">RFC7050</a>]</span>, or uses PREF64s received from Router Advertisements <span>[<a href="#RFC8781" class="cite xref">RFC8781</a>]</span>.
+It then synthesizes an appropriate IPv6 address (or
 several) using the encoding described in "IPv6 Addressing of IPv4/
 IPv6 Translators" <span>[<a href="#RFC6052" class="cite xref">RFC6052</a>]</span>. The synthesized addresses are then
 inserted into the list of addresses as if they were results from DNS
@@ -1941,6 +1942,10 @@ addresses.<a href="#section-11-1" class="pilcrow">¶</a></p>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8781">[RFC8781]</dt>
+        <dd>
+<span class="refAuthor">Colitti, L.</span> and <span class="refAuthor">J. Linkova</span>, <span class="refTitle">"Discovering PREF64 in Router Advertisements"</span>, <span class="seriesInfo">RFC 8781</span>, <span class="seriesInfo">DOI 10.17487/RFC8781</span>, <time datetime="2020-04" class="refDate">April 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8781">https://www.rfc-editor.org/rfc/rfc8781</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9000">[RFC9000]</dt>
         <dd>

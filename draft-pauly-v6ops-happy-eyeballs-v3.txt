@@ -506,7 +506,8 @@ Table of Contents
    When an IPv4 address is passed into the library instead of a
    hostname, the device queries the network for the NAT64 prefix using
    "Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis"
-   [RFC7050] and then synthesizes an appropriate IPv6 address (or
+   [RFC7050], or uses PREF64s received from Router Advertisements
+   [RFC8781].  It then synthesizes an appropriate IPv6 address (or
    several) using the encoding described in "IPv6 Addressing of IPv4/
    IPv6 Translators" [RFC6052].  The synthesized addresses are then
    inserted into the list of addresses as if they were results from DNS
@@ -719,6 +720,10 @@ Table of Contents
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8781]  Colitti, L. and J. Linkova, "Discovering PREF64 in Router
+              Advertisements", RFC 8781, DOI 10.17487/RFC8781, April
+              2020, <https://www.rfc-editor.org/rfc/rfc8781>.
 
    [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
               Multiplexed and Secure Transport", RFC 9000,
