@@ -44,7 +44,7 @@ document updates the algorithm description in RFC 8305.
     requests 2.31.0
     setuptools 67.7.2
     six 1.16.0
-    wcwidth 0.2.8
+    wcwidth 0.2.9
 -->
 <link href="draft-pauly-v6ops-happy-eyeballs-v3.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1043,11 +1043,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Happy Eyeballs v3</td>
-<td class="right">October 2023</td>
+<td class="right">November 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Pauly, et al.</td>
-<td class="center">Expires 25 April 2024</td>
+<td class="center">Expires 4 May 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1060,12 +1060,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-pauly-v6ops-happy-eyeballs-v3-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-23" class="published">23 October 2023</time>
+<time datetime="2023-11-01" class="published">1 November 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-25">25 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-05-04">4 May 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1131,7 +1131,7 @@ document updates the algorithm description in RFC 8305.<a href="#section-abstrac
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 25 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 4 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1515,10 +1515,10 @@ is out of scope of this document.<a href="#section-5-10" class="pilcrow">¶</a><
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-sorting-based-on-priority" class="section-name selfRef">Sorting Based on Priority</a>
         </h3>
 <p id="section-5.1-1">SVCB <span>[<a href="#SVCB" class="cite xref">SVCB</a>]</span> RRs indicate a priority for each ServiceMode response.
-This prioirity applies to any IPv4 or IPv6 address hints in the RR
+This priority applies to any IPv4 or IPv6 address hints in the RR
 itself, as well as any addresses received on A or AAAA queries for the
-name in the Servicemode RR. The priority in a SVCB RR is always
-greater than 0.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+name in the ServiceMode RR. The priority in a ServiceMode SVCB RR is
+always greater than 0.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">SVCB answers with the lowest numerical value (such as 1) are sorted
 first, and answers with higher numerical values are sorted later.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1-3">Note that a SVCB RR with the TargetName "." applies to the owner
