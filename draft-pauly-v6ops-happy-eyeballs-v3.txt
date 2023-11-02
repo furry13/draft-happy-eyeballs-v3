@@ -5,10 +5,10 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                 Apple Inc
 Intended status: Informational                               D. Schinazi
-Expires: 4 May 2024                                              N. Jaju
+Expires: 5 May 2024                                              N. Jaju
                                                             K. Ishibashi
                                                               Google LLC
-                                                         1 November 2023
+                                                         2 November 2023
 
 
     Happy Eyeballs Version 3: Better Connectivity Using Concurrency
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 May 2024.
+   This Internet-Draft will expire on 5 May 2024.
 
 Copyright Notice
 
@@ -227,10 +227,10 @@ Table of Contents
       valid AAAA, A, or SVCB ServiceMode RR), it starts the Resolution
       Delay timer, which is run until both the AAAA and SVCB ServiceMode
       responses are received, or a SVCB response is received that also
-      includes at least one address in the ipv6hint parameter.  Once
-      both records are received, or the timer expires, the client
-      proceeds with the process of sorting addresses and staggered
-      connection attempts.
+      includes at least one address in the ipv6hint parameter.  Once a
+      SVCB response and at least one IPv6 address have been received, or
+      the timer expires, the client proceeds with the process of sorting
+      addresses and staggered connection attempts.
 
    For both variations of the algorithm, the RECOMMENDED value for the
    Resolution Delay is 50 milliseconds.
