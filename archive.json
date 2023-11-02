@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-10-31T00:18:19.342921+00:00",
+  "timestamp": "2023-11-02T00:17:58.042777+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -149,7 +149,7 @@
       ],
       "body": "My initial proposal here is:\r\n\r\n- Request HTTPS records for any case where the port is 443 or 80, or the URL has a scheme of http:// or https://\r\n- Request the HTTPS record in parallel with A and AAAA",
       "createdAt": "2023-08-21T19:44:13Z",
-      "updatedAt": "2023-09-13T14:25:43Z",
+      "updatedAt": "2023-10-31T18:22:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -179,6 +179,13 @@
           "body": "Yes, web socket too",
           "createdAt": "2023-09-13T14:25:43Z",
           "updatedAt": "2023-09-13T14:25:43Z"
+        },
+        {
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "body": "For context, Chrome queries HTTPS whenever the request reaches our DNS stack tagged with a scheme of \"http\", \"https\", \"ws\", or \"wss\" (but websocket requests are typically internally converted to http/https-schemed URLs before the request gets there anyway).  Some requests, e.g. for proxy servers, never have their scheme tagged with the request to the DNS stack and never query HTTPS.  I keep meaning to fix that some day.",
+          "createdAt": "2023-10-31T18:22:21Z",
+          "updatedAt": "2023-10-31T18:22:21Z"
         }
       ]
     },
@@ -248,7 +255,7 @@
       "labels": [],
       "body": "ECH use can make the client be SVCB-reliant instead of SVCB-optional. At the very least, the algorithm will be impacted by being SVCB-reliant.",
       "createdAt": "2023-09-05T22:07:35Z",
-      "updatedAt": "2023-10-19T05:27:45Z",
+      "updatedAt": "2023-10-31T18:01:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -299,6 +306,13 @@
           "body": "Based on the above discussion, it seems there are three ways of approaching privacy in Happy Eyeballs with regards to ECH:\r\n1) You care about maximum privacy and wait for ECH keys no matter what before proceeding.\r\n2) You care about performance and privacy, so you start the TCP handshake and then wait for ECH keys until you make TLS/QUIC (with a timeout?).\r\n3) You don't wait for ECH keys and just start attempting connections.\r\n\r\nI think they're kind of implied in https://tfpauly.github.io/draft-happy-eyeballs-v3/draft-happy-eyeballs-v3.html#section-6.1-3, but we don't really talk about the privacy impacts of sending a TCP SYN ahead of receiving a SVCB RR (i.e. additional exposure of IP addresses that you might otherwise have never contacted).\r\n\r\nAlso, wondering if we should talk about a timeout for 2) above.",
           "createdAt": "2023-10-19T05:27:45Z",
           "updatedAt": "2023-10-19T05:27:45Z"
+        },
+        {
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "body": "Is the context of this discussion this part of draft-ietf-dnsop-svcb-https-12.html#section-3.1:\r\n\r\n> If DNS responses are cryptographically protected (e.g. using DNSSEC or TLS [[DoT](https://www.ietf.org/archive/id/draft-ietf-dnsop-svcb-https-12.html#DoT)][[DoH](https://www.ietf.org/archive/id/draft-ietf-dnsop-svcb-https-12.html#DoH)]), and SVCB resolution fails due to an authentication error, SERVFAIL response, transport error, or timeout, the client SHOULD abandon its attempt to reach the service, even if the client is SVCB-optional. Otherwise, an active attacker could mount a downgrade attack by denying the user access to the SvcParams.\r\n\r\n???\r\n\r\nFor further context, the specific downgrade attack we were worried about when drafting that paragraph is that a network-level attacker could using timing/size analysis to figure out which QUIC packets contained the HTTPS response and block just those while allowing A/AAAA through.  The client would then get A and AAAA, but HTTPS would either be blackholed or return one of the errors listed above, depending on how and where the attacker blocks the HTTPS packets.\r\n\r\nSo if the client then proceeds to attempt connection past the point where ECH could have been used, it means you've given attackers the ability to block ECH without piercing the encrypted DoH connection.  So we're not just talking a privacy loss of sometimes missing out on ECH when the response doesn't arrive in time.  We're talking a security compromise scenario where the attacker can completely and deliberately prevent ECH from ever being used.\r\n\r\n@davidben Since I believe he was also in many of those conversations and might have thoughts.",
+          "createdAt": "2023-10-31T18:01:21Z",
+          "updatedAt": "2023-10-31T18:01:21Z"
         }
       ]
     },
@@ -359,29 +373,48 @@
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18",
       "state": "OPEN",
       "author": "momoka0122y",
-      "authorAssociation": "NONE",
-      "assignees": [],
-      "labels": [],
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "nidhijaju"
+      ],
+      "labels": [
+        "discuss"
+      ],
       "body": "### Should synthesis be done to all address spaces?\r\n> If client applications or users wish to connect to IPv4 address\r\n> literals, the Happy Eyeballs engine will need to perform NAT64\r\n> address synthesis for them.\r\n\r\nI wonder if this has been discussed for RFC7050 but should this algorithm\r\nbe applied to 127.0.0.0/8 and RFC1918 address space? Maybe we should\r\ndiscuss if these address spaces should NOT be translated.\r\n\r\nFor the loopback address range (127.0.0.0/8), it should not be translated\r\nas the client in question should have a route to the loopback network\r\nresulting in the synthesis not being needed.\r\n\r\nFor addresses within the RFC1918 space, the translated address could be\r\nmisrouted to an unintended host, diverging from the user's original\r\nintention. Nonetheless, it is worth noting that nothing stops the inclusion\r\nof RFC1918 addresses in DNS records. As a result, translated IPv6 addresses\r\noriginating from RFC1918 space can still be acquired via DNS64. Given this,\r\nit may be counterintuitive to impose restrictions on such addresses in the\r\nHappy Eyeballs algorithm.",
       "createdAt": "2023-10-30T23:33:21Z",
-      "updatedAt": "2023-10-30T23:33:21Z",
+      "updatedAt": "2023-11-01T23:27:01Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We should add an editorial note about this, but make sure not to restrict anything because loopback and RFC1918 addresses can _technically_ need to be synthesized.",
+          "createdAt": "2023-11-01T01:51:00Z",
+          "updatedAt": "2023-11-01T01:51:00Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We discussed this issue from a security perspective in the [CONNECT-UDP RFC](https://www.rfc-editor.org/rfc/rfc9298#section-7-2). There we recommend against proxying loopback, link-local, multicast, etc.\r\n\r\nIdeally RFC 6146 should have warned implementers of NAT64 about this. Unfortunately it didn't.\r\n\r\nThat said, I think it makes sense to synthesize RFC 1918 space via 7050. 1918 space is not globally routeable, but 7050 has no such requirement.\r\n\r\n128.0.0.1/8 however is specific to this host, so synthesizing doesn't make sense when the NAT64 is on another device.\r\n\r\nLooking at the [Special-Use IPv4 Addresses Registry](https://www.iana.org/assignments/iana-ipv4-special-registry), I suspect we might want to restrict the following:\r\n* 0/8\r\n* 127/8\r\n* 169.254/16\r\n* 255.255.255.255/32\r\n\r\nAnother solution - which is what Apple implements - is to perform a route check for the target address and if there is a route then don't synthesize. For example, there's always a route to 127.0.0.1 over the loopback interface.",
+          "createdAt": "2023-11-01T23:27:01Z",
+          "updatedAt": "2023-11-01T23:27:01Z"
+        }
+      ]
     },
     {
       "number": 19,
       "id": "I_kwDOKH7CuM51Ym3Y",
       "title": "Section 8.1: Adding reference to RA PREF64 RFC8781",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/19",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "momoka0122y",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "\r\nFrom discussion\r\n\r\n> > the device queries the network for the NAT64 prefix using\r\n> > \"Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis\"\r\n> > [RFC7050] and then\r\n> > Regarding the use of RFC7050 for obtaining the NAT64 prefix, RA Option 38 (as specified in RFC8781) could also serve this purpose. However, given that this section is geared towards platforms not supporting 464XLAT, I assume doing rfc7050 is simpler than getting an RA message for an application so the omission of RFC8781 seems justified.\r\n> \r\n> I think it would be fine to mention to RFC8781. Perhaps you could file an issue on GitHub for that?\r\nhttps://mailarchive.ietf.org/arch/msg/v6ops/2csKJzBti4Mmb5vdWXp4-kzPd1k/\r\n\r\n\r\n```diff\r\n   When an IPv4 address is passed into the library instead of a\r\n   hostname, the device queries the network for the NAT64 prefix using\r\n   \"Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis\"\r\n- [RFC7050] \r\n+ [RFC7050] or PREF64 Router Advertisement option [RFC8781],\r\n   and then synthesizes an appropriate IPv6 address (or\r\n   several) using the encoding described in \"IPv6 Addressing of IPv4/\r\n   IPv6 Translators\" [RFC6052].  The synthesized addresses are then\r\n   inserted into the list of addresses as if they were results from DNS\r\n   queries; connection attempts follow the algorithm described above\r\n   (see Section 6).\r\n```",
       "createdAt": "2023-10-30T23:33:31Z",
-      "updatedAt": "2023-10-30T23:33:31Z",
-      "closedAt": null,
+      "updatedAt": "2023-11-01T23:22:19Z",
+      "closedAt": "2023-11-01T23:22:19Z",
       "comments": []
     },
     {
@@ -391,12 +424,77 @@
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/20",
       "state": "OPEN",
       "author": "momoka0122y",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "> >   8.1.  IPv4 Address Literals\r\n> >   Such translation also applies to any IPv4 address hints received in SVCB RRs.\r\n> > The mention of SVCB RRs makes this section a lot more meaningful as IP address literals may not have been so common but with SVCB RRS they will be common even in a client/server scenario.\r\n> \r\n> The other case that is common is when you\u2019re using encrypted DNS (DoT/DoH/etc) and asking for both address families. That\u2019s common to then get v4 answers that need to be translated.\r\n\r\nFrom reply from Tommy.\r\nhttps://mailarchive.ietf.org/arch/msg/v6ops/2csKJzBti4Mmb5vdWXp4-kzPd1k/\r\n\r\n\r\nSo maybe\r\n```diff\r\n- Such translation also applies to any IPv4 address hints received in SVCB RRs.\r\n+ Such translation also applies to any IPv4 address hints received in SVCB RRs or when using encrypted DNS (DoT/DoH/etc).\r\n```",
       "createdAt": "2023-10-30T23:33:34Z",
-      "updatedAt": "2023-10-30T23:33:34Z",
+      "updatedAt": "2023-11-01T02:02:57Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'm not sure we need to update this sentence. My understanding of Tommy's reply is about addresses from A/AAAA answers, which are already covered?",
+          "createdAt": "2023-10-31T06:29:49Z",
+          "updatedAt": "2023-10-31T06:29:49Z"
+        },
+        {
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> If client applications or users wish to connect to IPv4 address literals, the Happy Eyeballs engine will need to perform NAT64 address synthesis for them. The solution is similar to \"Bump-in-the- Host\" [[RFC6535](https://tfpauly.github.io/draft-happy-eyeballs-v3/draft-pauly-v6ops-happy-eyeballs-v3.html#RFC6535)] but is implemented inside the Happy Eyeballs library.\r\n>\r\n>When an IPv4 address is passed into the library instead of a hostname, the device queries the network for the NAT64 prefix using \"Discovery of the IPv6 Prefix Used for IPv6 Address Synthesis\" [[RFC7050](https://tfpauly.github.io/draft-happy-eyeballs-v3/draft-pauly-v6ops-happy-eyeballs-v3.html#RFC7050)] and then synthesizes an appropriate IPv6 address (or several) using the encoding described in \"IPv6 Addressing of IPv4/ IPv6 Translators\" [[RFC6052](https://tfpauly.github.io/draft-happy-eyeballs-v3/draft-pauly-v6ops-happy-eyeballs-v3.html#RFC6052)]. The synthesized addresses are then inserted into the list of addresses as if they were results from DNS queries; connection attempts follow the algorithm described above (see [Section 6](https://tfpauly.github.io/draft-happy-eyeballs-v3/draft-pauly-v6ops-happy-eyeballs-v3.html#connections)).\r\n>\r\n>Such translation also applies to any IPv4 address hints received in SVCB RRs.\r\n\r\nThis is the entirety of Section 8.1. It might be worth adding a note that says something like it also applies to \"IPv4 addresses received in A records\".",
+          "createdAt": "2023-11-01T02:02:57Z",
+          "updatedAt": "2023-11-01T02:02:57Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOKH7CuM51efd2",
+      "title": "Section 4: \"Once both records are received\"",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/22",
+      "state": "OPEN",
+      "author": "edmonds",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 4: https://github.com/tfpauly/draft-happy-eyeballs-v3/blob/ac7338752ffe24ea52d128944897b3241d17d96b/draft-pauly-v6ops-happy-eyeballs-v3.md#L187-L196\r\n\r\n> If the client did request SVCB RRs:\r\n>\r\n> * If the client receives any positive response back (containing a valid AAAA, A, or SVCB ServiceMode RR), it starts the Resolution Delay timer, which is run until both the AAAA and SVCB ServiceMode responses are received, or a SVCB response is received that also includes at least one address in the ipv6hint parameter. _**Once both records are received,**_ or the timer expires, the client proceeds with the process of sorting addresses and staggered connection attempts.\r\n\r\n\"Once both records are received\" seems to be referring to receiving both AAAA and SVCB ServiceMode RR's, but this is in tension with the previous sentence which allows proceeding without receiving the AAAA response yet if a SVCB has been received that contains at least one IPv6 address hint.\r\n\r\nSuggested replacement text:\r\n\r\n> If the client did request SVCB RRs:\r\n>\r\n> * If the client receives any positive response back (containing a valid AAAA, A, or SVCB ServiceMode RR), it starts the Resolution Delay timer, which is run until both the AAAA and SVCB ServiceMode responses are received, or a SVCB response is received that also includes at least one address in the ipv6hint parameter. _**Once at least one IPv6 address has been received,**_ or the timer expires, the client proceeds with the process of sorting addresses and staggered connection attempts.",
+      "createdAt": "2023-10-31T17:15:32Z",
+      "updatedAt": "2023-10-31T17:16:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOKH7CuM51enyI",
+      "title": "Section 5: \"The priority in a SVCB RR is always greater than 0\"",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/23",
+      "state": "CLOSED",
+      "author": "edmonds",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "nidhijaju"
+      ],
+      "labels": [],
+      "body": "https://github.com/tfpauly/draft-happy-eyeballs-v3/blob/ac7338752ffe24ea52d128944897b3241d17d96b/draft-pauly-v6ops-happy-eyeballs-v3.md?plain=1#L306-L311\r\n\r\n\"prioirity\" \u2192 \"priority\"\r\n\r\n\"Servicemode\" \u2192 \"ServiceMode\"\r\n\r\n\"The priority in a SVCB RR is always greater than 0\" \u2192 \"The priority in a ServiceMode SVCB RR is always greater than 0\"",
+      "createdAt": "2023-10-31T17:34:45Z",
+      "updatedAt": "2023-11-01T05:03:18Z",
+      "closedAt": "2023-11-01T05:03:18Z",
+      "comments": []
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOKH7CuM51fEqU",
+      "title": "Discuss impact on DNS-based http->https upgrade",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/24",
+      "state": "OPEN",
+      "author": "ericorth",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Similarly to #6, need a discussion on using A/AAAA without waiting for HTTPS when the HTTPS record could have forced upgrade to https://.  Clients need to be aware of the potential tradeoffs of that functionality potentially getting skipped.",
+      "createdAt": "2023-10-31T18:27:46Z",
+      "updatedAt": "2023-10-31T18:27:46Z",
       "closedAt": null,
       "comments": []
     }
@@ -817,21 +915,21 @@
       "id": "PR_kwDOKH7CuM5aolNY",
       "title": "Rough draft of changes",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/9",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tfpauly",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Scoping in the changes roughly, for internal review",
       "createdAt": "2023-09-19T03:31:22Z",
-      "updatedAt": "2023-09-19T20:46:43Z",
+      "updatedAt": "2023-11-01T05:04:03Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "bdd120489d779d04fb5ccceddc2b6c1bb8be7e85",
       "headRepository": "tfpauly/draft-happy-eyeballs-v3",
       "headRefName": "tfpauly-rough-draft",
       "headRefOid": "d6153d808206a94768d62e1a99d0217969620e45",
-      "closedAt": null,
+      "closedAt": "2023-11-01T05:04:03Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -1531,6 +1629,293 @@
         }
       ],
       "reviews": []
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOKH7CuM5eMKf6",
+      "title": "Refer to PREF64",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/21",
+      "state": "CLOSED",
+      "author": "bashi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #19.",
+      "createdAt": "2023-10-31T05:25:07Z",
+      "updatedAt": "2023-10-31T23:05:20Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "ac7338752ffe24ea52d128944897b3241d17d96b",
+      "headRepository": "bashi/draft-happy-eyeballs-v3",
+      "headRefName": "pref64",
+      "headRefOid": "1da9a49b650a8438a81e7d11f0c4a6c3b4c3772d",
+      "closedAt": "2023-10-31T23:05:20Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "momoka0122y",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Can I make this PR just for the sake of having my name in the blame?",
+          "createdAt": "2023-10-31T16:25:12Z",
+          "updatedAt": "2023-10-31T16:25:12Z"
+        },
+        {
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sure, please send a PR.",
+          "createdAt": "2023-10-31T23:05:20Z",
+          "updatedAt": "2023-10-31T23:05:20Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOKH7CuM5eSqTP",
+      "title": "Add a note about NAT64 address synthesis",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/25",
+      "state": "OPEN",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18.",
+      "createdAt": "2023-11-01T02:16:12Z",
+      "updatedAt": "2023-11-01T23:29:38Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "ac7338752ffe24ea52d128944897b3241d17d96b",
+      "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
+      "headRefName": "address-synthesis",
+      "headRefOid": "80d7ee2133d075728eec32523add3b758cabdd9e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "momoka0122y",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Sorry, I should have said I wanted to create a PR for this myself after discussion was done on the issue.\r\nI think the wording can be improved so I've submitted my own PR. #27 ",
+          "createdAt": "2023-11-01T10:45:51Z",
+          "updatedAt": "2023-11-01T10:45:51Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5lx59F",
+          "commit": {
+            "abbreviatedOid": "80d7ee2"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-11-01T05:03:48Z",
+          "updatedAt": "2023-11-01T05:03:48Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5l4KTv",
+          "commit": {
+            "abbreviatedOid": "80d7ee2"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-01T23:29:38Z",
+          "updatedAt": "2023-11-01T23:29:38Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "I wouldn't mention 1918 space, see discussion in #18 ",
+              "createdAt": "2023-11-01T23:29:38Z",
+              "updatedAt": "2023-11-01T23:29:38Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOKH7CuM5eSq6D",
+      "title": "Fix typos in Section 5",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/26",
+      "state": "MERGED",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/23.",
+      "createdAt": "2023-11-01T02:19:57Z",
+      "updatedAt": "2023-11-01T05:03:17Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "ac7338752ffe24ea52d128944897b3241d17d96b",
+      "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
+      "headRefName": "section-5-typos",
+      "headRefOid": "120f63549741145c420d955ac0b441fdea193339",
+      "closedAt": "2023-11-01T05:03:17Z",
+      "mergedAt": "2023-11-01T05:03:17Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "d426f35a29b047e41db353f0f042fcf71f666055"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5lx526",
+          "commit": {
+            "abbreviatedOid": "120f635"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-11-01T05:03:13Z",
+          "updatedAt": "2023-11-01T05:03:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOKH7CuM5eUgrX",
+      "title": "NAT64 address synthesis warning",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/27",
+      "state": "CLOSED",
+      "author": "momoka0122y",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18 .",
+      "createdAt": "2023-11-01T10:42:08Z",
+      "updatedAt": "2023-11-01T23:20:20Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "d426f35a29b047e41db353f0f042fcf71f666055",
+      "headRepository": "momoka0122y/draft-happy-eyeballs-v3",
+      "headRefName": "patch-1",
+      "headRefOid": "cf89e6abd12d25f9540f5fd9dff736e665025623",
+      "closedAt": "2023-11-01T23:20:19Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "Please just suggest edits to https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/25",
+          "createdAt": "2023-11-01T23:20:19Z",
+          "updatedAt": "2023-11-01T23:20:19Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOKH7CuM5eUpWd",
+      "title": "Referece PREF64",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/28",
+      "state": "MERGED",
+      "author": "momoka0122y",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/19.\r\n\r\n(Sorry I made the PR myself because I wanted my name in the blame.)",
+      "createdAt": "2023-11-01T11:08:45Z",
+      "updatedAt": "2023-11-01T23:22:19Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "d426f35a29b047e41db353f0f042fcf71f666055",
+      "headRepository": "momoka0122y/draft-happy-eyeballs-v3",
+      "headRefName": "patch-2",
+      "headRefOid": "31a9866c5f97bb9d1aba104ffded771dad5ecff2",
+      "closedAt": "2023-11-01T23:22:18Z",
+      "mergedAt": "2023-11-01T23:22:18Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "1d96f23fc8c7d3b0963c76e2922f938deecdb117"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5lzyDt",
+          "commit": {
+            "abbreviatedOid": "1f23b6c"
+          },
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-01T12:03:45Z",
+          "updatedAt": "2023-11-01T12:03:45Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\n{{!RFC7050}}, or uses PREF64s  {{!RFC8781}} received from the network\r\nto synthesize appropriate IPv6 addresses\r\n```\r\n\r\nAs RFC8781 mentioned there might be multiple prefixes.",
+              "createdAt": "2023-11-01T12:03:45Z",
+              "updatedAt": "2023-11-01T12:03:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5l0E3b",
+          "commit": {
+            "abbreviatedOid": "1f23b6c"
+          },
+          "author": "momoka0122y",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-01T12:48:09Z",
+          "updatedAt": "2023-11-01T12:51:28Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "I tried to make it the same as the text for RFC7050 which also doesn't mention there being multiple prefixes but the \"a\" in the sentence is indeed misleading.\r\n\r\nHow about the below?\r\n``` diff\r\n+ {{!RFC7050}}, or uses PREF64s received from Router Advertisements {{!RFC8781}}.\r\n```",
+              "createdAt": "2023-11-01T12:48:09Z",
+              "updatedAt": "2023-11-01T12:51:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5l0QXl",
+          "commit": {
+            "abbreviatedOid": "1f23b6c"
+          },
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-01T13:12:24Z",
+          "updatedAt": "2023-11-01T13:12:24Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Looks good to me.\r\nNit-picking: Replacing \"It\" with \"The device\" might be a bit more explicit.",
+              "createdAt": "2023-11-01T13:12:24Z",
+              "updatedAt": "2023-11-01T13:12:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5l4JIN",
+          "commit": {
+            "abbreviatedOid": "31a9866"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-11-01T23:22:11Z",
+          "updatedAt": "2023-11-01T23:22:11Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
