@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-11-02T00:17:58.042777+00:00",
+  "timestamp": "2023-11-05T00:19:44.789250+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -371,7 +371,7 @@
       "id": "I_kwDOKH7CuM51Ym1T",
       "title": "Section 8.1: RFC7050 should not be applied to 127.0.0.0/8 and RFC1918 address space?",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "momoka0122y",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -382,8 +382,8 @@
       ],
       "body": "### Should synthesis be done to all address spaces?\r\n> If client applications or users wish to connect to IPv4 address\r\n> literals, the Happy Eyeballs engine will need to perform NAT64\r\n> address synthesis for them.\r\n\r\nI wonder if this has been discussed for RFC7050 but should this algorithm\r\nbe applied to 127.0.0.0/8 and RFC1918 address space? Maybe we should\r\ndiscuss if these address spaces should NOT be translated.\r\n\r\nFor the loopback address range (127.0.0.0/8), it should not be translated\r\nas the client in question should have a route to the loopback network\r\nresulting in the synthesis not being needed.\r\n\r\nFor addresses within the RFC1918 space, the translated address could be\r\nmisrouted to an unintended host, diverging from the user's original\r\nintention. Nonetheless, it is worth noting that nothing stops the inclusion\r\nof RFC1918 addresses in DNS records. As a result, translated IPv6 addresses\r\noriginating from RFC1918 space can still be acquired via DNS64. Given this,\r\nit may be counterintuitive to impose restrictions on such addresses in the\r\nHappy Eyeballs algorithm.",
       "createdAt": "2023-10-30T23:33:21Z",
-      "updatedAt": "2023-11-01T23:27:01Z",
-      "closedAt": null,
+      "updatedAt": "2023-11-03T09:08:53Z",
+      "closedAt": "2023-11-03T00:28:31Z",
       "comments": [
         {
           "author": "nidhijaju",
@@ -398,6 +398,34 @@
           "body": "We discussed this issue from a security perspective in the [CONNECT-UDP RFC](https://www.rfc-editor.org/rfc/rfc9298#section-7-2). There we recommend against proxying loopback, link-local, multicast, etc.\r\n\r\nIdeally RFC 6146 should have warned implementers of NAT64 about this. Unfortunately it didn't.\r\n\r\nThat said, I think it makes sense to synthesize RFC 1918 space via 7050. 1918 space is not globally routeable, but 7050 has no such requirement.\r\n\r\n128.0.0.1/8 however is specific to this host, so synthesizing doesn't make sense when the NAT64 is on another device.\r\n\r\nLooking at the [Special-Use IPv4 Addresses Registry](https://www.iana.org/assignments/iana-ipv4-special-registry), I suspect we might want to restrict the following:\r\n* 0/8\r\n* 127/8\r\n* 169.254/16\r\n* 255.255.255.255/32\r\n\r\nAnother solution - which is what Apple implements - is to perform a route check for the target address and if there is a route then don't synthesize. For example, there's always a route to 127.0.0.1 over the loopback interface.",
           "createdAt": "2023-11-01T23:27:01Z",
           "updatedAt": "2023-11-01T23:27:01Z"
+        },
+        {
+          "author": "momoka0122y",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> That said, I think it makes sense to synthesize RFC 1918 space via 7050. 1918 space is not globally routeable, but 7050 has no such requirement.\r\n\r\nI don't think there should be a text that restricts synthesising the address space but I think there should be an warning of how it `can` be routed to an undesired place.\r\n\r\nhence I propose a text like\r\n\r\n```\r\nIPv4 addresses in the {{!RFC1918}} space may be routed unintendedly when doing NAT64 address synthesis depending on the network configuration of the NAT64 gateway.\r\n```\r\n\r\nI am thinking of a situation like below. The client A is not connected to 192.168.1.1 via IPv4. Depending on where the NAT64 box is at, the client can reach a host with a 1918 space address in a completely different network. (ex. different AS)\r\nTHe client may think that the 192.168.1.1 it is reaching is a totally different host. \r\n```\r\n+--------+        IPv6 Network    +-------+      IPv4 Network     +-------------+\r\n| ClientA |---------------------->| NAT64 |---------------------->| 192.168.1.1 |\r\n+--------+   64:ff9b::192.168.1.1 +-------+       192.168.1.1     +-------------+\r\n```\r\n\r\nThis shouldn't be restricted but I think it would be nice if there is a caution that it may send packets to a client that it is not connected to which normally does not happen in 1918 space.",
+          "createdAt": "2023-11-02T09:32:06Z",
+          "updatedAt": "2023-11-02T09:42:13Z"
+        },
+        {
+          "author": "momoka0122y",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Another solution - which is what Apple implements - is to perform a route check for the target address and if there is a route then don't synthesize. For example, there's always a route to 127.0.0.1 over the loopback interface.\r\n\r\nThis is also what chrome does (at least last time I checked) but I think as a document it is nice to have the actual IPv4 address spaces written down rather than how it should be implemented.",
+          "createdAt": "2023-11-02T09:33:51Z",
+          "updatedAt": "2023-11-02T09:33:51Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The target audience for this document is implementers of HEv3. I'm not seeing how the caution about 1918 is useful for that audience, because there's nothing an HEv3 implementation can or should do about 1918",
+          "createdAt": "2023-11-02T19:41:33Z",
+          "updatedAt": "2023-11-02T19:41:33Z"
+        },
+        {
+          "author": "momoka0122y",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> The target audience for this document is implementers of HEv3. I'm not seeing how the caution about 1918 is useful for that audience, because there's nothing an HEv3 implementation can or should do about 1918\r\n\r\nI was actually thinking of chrome and apple devises that implements this.",
+          "createdAt": "2023-11-03T09:08:53Z",
+          "updatedAt": "2023-11-03T09:08:53Z"
         }
       ]
     },
@@ -453,15 +481,17 @@
       "id": "I_kwDOKH7CuM51efd2",
       "title": "Section 4: \"Once both records are received\"",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/22",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "edmonds",
       "authorAssociation": "NONE",
-      "assignees": [],
+      "assignees": [
+        "nidhijaju"
+      ],
       "labels": [],
       "body": "Section 4: https://github.com/tfpauly/draft-happy-eyeballs-v3/blob/ac7338752ffe24ea52d128944897b3241d17d96b/draft-pauly-v6ops-happy-eyeballs-v3.md#L187-L196\r\n\r\n> If the client did request SVCB RRs:\r\n>\r\n> * If the client receives any positive response back (containing a valid AAAA, A, or SVCB ServiceMode RR), it starts the Resolution Delay timer, which is run until both the AAAA and SVCB ServiceMode responses are received, or a SVCB response is received that also includes at least one address in the ipv6hint parameter. _**Once both records are received,**_ or the timer expires, the client proceeds with the process of sorting addresses and staggered connection attempts.\r\n\r\n\"Once both records are received\" seems to be referring to receiving both AAAA and SVCB ServiceMode RR's, but this is in tension with the previous sentence which allows proceeding without receiving the AAAA response yet if a SVCB has been received that contains at least one IPv6 address hint.\r\n\r\nSuggested replacement text:\r\n\r\n> If the client did request SVCB RRs:\r\n>\r\n> * If the client receives any positive response back (containing a valid AAAA, A, or SVCB ServiceMode RR), it starts the Resolution Delay timer, which is run until both the AAAA and SVCB ServiceMode responses are received, or a SVCB response is received that also includes at least one address in the ipv6hint parameter. _**Once at least one IPv6 address has been received,**_ or the timer expires, the client proceeds with the process of sorting addresses and staggered connection attempts.",
       "createdAt": "2023-10-31T17:15:32Z",
-      "updatedAt": "2023-10-31T17:16:42Z",
-      "closedAt": null,
+      "updatedAt": "2023-11-02T23:12:03Z",
+      "closedAt": "2023-11-02T23:12:03Z",
       "comments": []
     },
     {
@@ -495,6 +525,40 @@
       "body": "Similarly to #6, need a discussion on using A/AAAA without waiting for HTTPS when the HTTPS record could have forced upgrade to https://.  Clients need to be aware of the potential tradeoffs of that functionality potentially getting skipped.",
       "createdAt": "2023-10-31T18:27:46Z",
       "updatedAt": "2023-10-31T18:27:46Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 30,
+      "id": "I_kwDOKH7CuM512p67",
+      "title": "Move up the last Protocol Combination while sorting",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/30",
+      "state": "OPEN",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "nidhijaju"
+      ],
+      "labels": [],
+      "body": "https://twitter.com/flano_yuki/status/1717731672815485016 made me think about the sorted ordering in [Section 5](https://tfpauly.github.io/draft-happy-eyeballs-v3/draft-pauly-v6ops-happy-eyeballs-v3.html#section-5-9) again and realized we should probably have a TCP IPv4 endpoint towards the beginning as well, just in case QUIC and IPv6 are both broken, however unlikely it may be. This is so that just in case both the protocol and address family are in fact impaired, the client doesn't have to wait a long time before it gets a good/working endpoint.",
+      "createdAt": "2023-11-04T09:54:58Z",
+      "updatedAt": "2023-11-04T09:55:23Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOKH7CuM512_CI",
+      "title": "The Well-Known Prefix MUST NOT be used to represent non-global IPv4 addresses, such as RFC1918",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/32",
+      "state": "OPEN",
+      "author": "momoka0122y",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This was dismissed on https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18 but today I just found it in RFC6052. (I didn't notice this until now since i was only reading RFC7050 and RFC6146)\r\n\r\n```\r\n[3.1](https://datatracker.ietf.org/doc/html/rfc6052#section-3.1).  Restrictions on the Use of the Well-Known Prefix\r\n\r\n   The Well-Known Prefix MUST NOT be used to represent non-global IPv4\r\n   addresses, such as those defined in [[RFC1918](https://datatracker.ietf.org/doc/html/rfc1918)] or listed in Section 3\r\n   of [RFC5735].  Address translators MUST NOT translate packets in\r\n   which an address is composed of the Well-Known Prefix and a non-\r\n   global IPv4 address; they MUST drop these packets.\r\n```\r\n\r\nIf you think this part is not necessary because it is already documented here I understand, but I think it is very informational if it is in this document. (As I did not know this was a MUST NOT until today)",
+      "createdAt": "2023-11-04T13:49:19Z",
+      "updatedAt": "2023-11-04T13:49:19Z",
       "closedAt": null,
       "comments": []
     }
@@ -1676,24 +1740,26 @@
       "id": "PR_kwDOKH7CuM5eSqTP",
       "title": "Add a note about NAT64 address synthesis",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/25",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nidhijaju",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "Addresses https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18.",
+      "body": "Closes https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18.",
       "createdAt": "2023-11-01T02:16:12Z",
-      "updatedAt": "2023-11-01T23:29:38Z",
+      "updatedAt": "2023-11-03T00:28:30Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "ac7338752ffe24ea52d128944897b3241d17d96b",
       "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
       "headRefName": "address-synthesis",
-      "headRefOid": "80d7ee2133d075728eec32523add3b758cabdd9e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "da7befe2c0993c2435ddb72fcddc7715b756542e",
+      "closedAt": "2023-11-03T00:28:29Z",
+      "mergedAt": "2023-11-03T00:28:29Z",
+      "mergedBy": "nidhijaju",
+      "mergeCommit": {
+        "oid": "10e6501b99e548af0f9d637f1a941f661baa3fb9"
+      },
       "comments": [
         {
           "author": "momoka0122y",
@@ -1701,6 +1767,20 @@
           "body": "Sorry, I should have said I wanted to create a PR for this myself after discussion was done on the issue.\r\nI think the wording can be improved so I've submitted my own PR. #27 ",
           "createdAt": "2023-11-01T10:45:51Z",
           "updatedAt": "2023-11-01T10:45:51Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "Or \"Closes #18\"",
+          "createdAt": "2023-11-02T23:37:17Z",
+          "updatedAt": "2023-11-02T23:37:17Z"
+        },
+        {
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Updated :) Okay, let me merge this.",
+          "createdAt": "2023-11-03T00:28:21Z",
+          "updatedAt": "2023-11-03T00:28:21Z"
         }
       ],
       "reviews": [
@@ -1736,6 +1816,105 @@
               "updatedAt": "2023-11-01T23:29:38Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5l5LV4",
+          "commit": {
+            "abbreviatedOid": "80d7ee2"
+          },
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-02T05:38:26Z",
+          "updatedAt": "2023-11-02T05:38:27Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "I deliberately tried to phrase it as a gentle warning because the 1918 space may still be something you want to synthesize. Maybe there's a better way to phrase it?\r\n\r\nBased on #18, I updated the first sentence with the other subnets as well.",
+              "createdAt": "2023-11-02T05:38:26Z",
+              "updatedAt": "2023-11-02T05:38:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5l_V7K",
+          "commit": {
+            "abbreviatedOid": "d66fba5"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-02T19:37:27Z",
+          "updatedAt": "2023-11-02T19:39:47Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\nNote that some IPv4 prefixes are scoped to a given host or network, such as\r\n```",
+              "createdAt": "2023-11-02T19:37:27Z",
+              "updatedAt": "2023-11-02T19:39:47Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "I'm not sure what this guidance about 1918 is saying: should an implementer of HEv3 treat 1918 differently? There can be issues if the client and NAT64 box are connected to different installments of 1918 space, but that's not something the HEv3 implementation can find out about",
+              "createdAt": "2023-11-02T19:39:31Z",
+              "updatedAt": "2023-11-02T19:39:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5mAb3L",
+          "commit": {
+            "abbreviatedOid": "d37fd9c"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-02T23:12:57Z",
+          "updatedAt": "2023-11-02T23:12:58Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\ntherefore do not require NAT64 address synthesis.\r\n\r\n```",
+              "createdAt": "2023-11-02T23:12:57Z",
+              "updatedAt": "2023-11-02T23:12:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5mAckC",
+          "commit": {
+            "abbreviatedOid": "d66fba5"
+          },
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-02T23:16:20Z",
+          "updatedAt": "2023-11-02T23:16:20Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Fair enough, I've removed the sentence about 1918 for now.",
+              "createdAt": "2023-11-02T23:16:20Z",
+              "updatedAt": "2023-11-02T23:16:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5mAgH_",
+          "commit": {
+            "abbreviatedOid": "da7befe"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM.\r\n\r\nBTW, if you rename the description from \"Addresses #18.\" to \"Fixes #18.\" then it'll trigger GitHub's automated system that autocloses the issue when the PR is merged.",
+          "createdAt": "2023-11-02T23:32:05Z",
+          "updatedAt": "2023-11-02T23:32:05Z",
+          "comments": []
         }
       ]
     },
@@ -1914,6 +2093,134 @@
           "createdAt": "2023-11-01T23:22:11Z",
           "updatedAt": "2023-11-01T23:22:11Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOKH7CuM5eaEVe",
+      "title": "Clarify wording in Section 4",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/29",
+      "state": "MERGED",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/22.",
+      "createdAt": "2023-11-02T08:40:37Z",
+      "updatedAt": "2023-11-02T23:12:02Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "1d96f23fc8c7d3b0963c76e2922f938deecdb117",
+      "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
+      "headRefName": "section-4-clarify",
+      "headRefOid": "c2a65d953bad5e858ca52ad68c25d9fb863e922b",
+      "closedAt": "2023-11-02T23:12:02Z",
+      "mergedAt": "2023-11-02T23:12:02Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "84911632f98035323a456ca9c40f0b9f6e0534d1"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5l_ZpR",
+          "commit": {
+            "abbreviatedOid": "c2a65d9"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-11-02T19:49:07Z",
+          "updatedAt": "2023-11-02T19:49:07Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5mAbrt",
+          "commit": {
+            "abbreviatedOid": "c2a65d9"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-11-02T23:11:56Z",
+          "updatedAt": "2023-11-02T23:11:56Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "PR_kwDOKH7CuM5el64b",
+      "title": "Move up the last Protocol Combination while sorting endpoints",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/31",
+      "state": "OPEN",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This suggests moving up the first TCP IPv4 endpoint as well in the sorted list.\r\n\r\nFixes https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/30.",
+      "createdAt": "2023-11-04T09:57:51Z",
+      "updatedAt": "2023-11-04T09:57:51Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "10e6501b99e548af0f9d637f1a941f661baa3fb9",
+      "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
+      "headRefName": "sort-order",
+      "headRefOid": "1000af83b06ba82a8270bfdf5a7849132fed39cf",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 33,
+      "id": "PR_kwDOKH7CuM5emMP1",
+      "title": "The Well-Known Prefix MUST NOT be used to represent non-global IPv4 addresses, such as RFC1918",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/33",
+      "state": "OPEN",
+      "author": "momoka0122y",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "closes #32 \r\n\r\n",
+      "createdAt": "2023-11-04T13:50:59Z",
+      "updatedAt": "2023-11-04T13:54:11Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "10e6501b99e548af0f9d637f1a941f661baa3fb9",
+      "headRepository": "momoka0122y/draft-happy-eyeballs-v3",
+      "headRefName": "patch-3",
+      "headRefOid": "815143c7b345ffcd99a3a04d24ca77a0023bdc0d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5mJjGO",
+          "commit": {
+            "abbreviatedOid": "815143c"
+          },
+          "author": "momoka0122y",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-04T13:53:05Z",
+          "updatedAt": "2023-11-04T13:53:12Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I also think this whole paragraph should be at the end of the section for readability.\r\n\r\nBe right before\r\n## Hostnames with Broken AAAA Records {#broken}",
+              "createdAt": "2023-11-04T13:53:05Z",
+              "updatedAt": "2023-11-04T13:53:12Z"
+            }
+          ]
         }
       ]
     }
