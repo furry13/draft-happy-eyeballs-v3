@@ -5,10 +5,10 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                 Apple Inc
 Intended status: Informational                               D. Schinazi
-Expires: 6 May 2024                                              N. Jaju
+Expires: 9 May 2024                                              N. Jaju
                                                             K. Ishibashi
                                                               Google LLC
-                                                         3 November 2023
+                                                         6 November 2023
 
 
     Happy Eyeballs Version 3: Better Connectivity Using Concurrency
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 May 2024.
+   This Internet-Draft will expire on 9 May 2024.
 
 Copyright Notice
 
@@ -320,12 +320,14 @@ Table of Contents
    Next, the client SHOULD modify the ordered list to interleave
    protocols and address families.  Whichever combination of protocol
    and address family is first in the list should be followed by an
-   address of the other protocol type and same address family, and then
-   an endpoint from the same protocol and other address family.  For
+   endpoint of the other protocol type and same address family, then an
+   endpoint from the same protocol and other address family, and then an
+   endpoint from the other protocol and other address family.  For
    example, if the first address in the sorted list is a QUIC IPv6
    address, then the first TCP IPv6 address should be moved up in the
-   list to be second in the list, and then the first QUIC IPv4 address
-   should be moved up in the list to be third in the list.  An
+   list to be second in the list, then the first QUIC IPv4 address
+   should be moved up to be third in the list, and then the first TCP
+   IPv4 address should be moved up to be fourth in the list.  An
    implementation MAY choose to favor one protocol or address family
    more by allowing multiple addresses of that protocol or family to be
    attempted before trying the other combinations.  The number of

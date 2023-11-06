@@ -1047,7 +1047,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Pauly, et al.</td>
-<td class="center">Expires 6 May 2024</td>
+<td class="center">Expires 9 May 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1060,12 +1060,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-pauly-v6ops-happy-eyeballs-v3-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-11-03" class="published">3 November 2023</time>
+<time datetime="2023-11-06" class="published">6 November 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-06">6 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-05-09">9 May 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1131,7 +1131,7 @@ document updates the algorithm description in RFC 8305.<a href="#section-abstrac
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1491,19 +1491,21 @@ the network to which it is attached.<a href="#section-5-8" class="pilcrow">¶</a
 <p id="section-5-9">Next, the client <span class="bcp14">SHOULD</span> modify the ordered list to interleave
 protocols and address families. Whichever combination of protocol
 and address family is first in the list should be followed by an
-address of the other protocol type and same address family, and then
-an endpoint from the same protocol and other address family. For example,
+endpoint of the other protocol type and same address family, then an
+endpoint from the same protocol and other address family, and then an
+endpoint from the other protocol and other address family. For example,
 if the first address in the sorted list is a QUIC IPv6 address, then
 the first TCP IPv6 address should be moved up in the list to be second
-in the list, and then the first QUIC IPv4 address should be moved up
-in the list to be third in the list. An implementation <span class="bcp14">MAY</span> choose to
-favor one protocol or address family more by allowing multiple
-addresses of that protocol or family to be attempted before trying the
-other combinations. The number of contiguous addresses of the first
-combination of properties will be referred to as the "Preferred Protocol
-Combination Count" and can be a configurable value. This avoids waiting
-through a long list of addresses from a given address family using a
-given protocol if connectivity over a protocol or an address family is
+in the list, then the first QUIC IPv4 address should be moved up to be
+third in the list, and then the first TCP IPv4 address should be moved
+up to be fourth in the list. An implementation <span class="bcp14">MAY</span> choose to favor one
+protocol or address family more by allowing multiple addresses of that
+protocol or family to be attempted before trying the other combinations.
+The number of contiguous addresses of the first combination of
+properties will be referred to as the "Preferred Protocol Combination
+Count" and can be a configurable value. This avoids waiting through a
+long list of addresses from a given address family using a given
+protocol if connectivity over a protocol or an address family is
 impaired.<a href="#section-5-9" class="pilcrow">¶</a></p>
 <p id="section-5-10">Note that the address selection described in this section only
 applies to destination addresses; Source Address Selection
