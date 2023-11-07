@@ -5,10 +5,10 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                 Apple Inc
 Intended status: Informational                               D. Schinazi
-Expires: 9 May 2024                                              N. Jaju
+Expires: 10 May 2024                                             N. Jaju
                                                             K. Ishibashi
                                                               Google LLC
-                                                         6 November 2023
+                                                         7 November 2023
 
 
     Happy Eyeballs Version 3: Better Connectivity Using Concurrency
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 May 2024.
+   This Internet-Draft will expire on 10 May 2024.
 
 Copyright Notice
 
@@ -737,12 +737,10 @@ Table of Contents
               DOI 10.17487/RFC9000, May 2021,
               <https://www.rfc-editor.org/rfc/rfc9000>.
 
-   [SVCB]     Schwartz, B. M., Bishop, M., and E. Nygren, "Service
-              binding and parameter specification via the DNS (DNS SVCB
-              and HTTPS RRs)", Work in Progress, Internet-Draft, draft-
-              ietf-dnsop-svcb-https-12, 11 March 2023,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-dnsop-
-              svcb-https-12>.
+   [SVCB]     Schwartz, B., Bishop, M., and E. Nygren, "Service Binding
+              and Parameter Specification via the DNS (SVCB and HTTPS
+              Resource Records)", RFC 9460, DOI 10.17487/RFC9460,
+              November 2023, <https://www.rfc-editor.org/rfc/rfc9460>.
 
    [SVCB-ECH] Schwartz, B. M., Bishop, M., and E. Nygren, "Bootstrapping
               TLS Encrypted ClientHello with DNS Service Bindings", Work
