@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-11-05T00:19:44.789250+00:00",
+  "timestamp": "2023-11-07T00:18:19.127922+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -533,7 +533,7 @@
       "id": "I_kwDOKH7CuM512p67",
       "title": "Move up the last Protocol Combination while sorting",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/30",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nidhijaju",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -542,9 +542,31 @@
       "labels": [],
       "body": "https://twitter.com/flano_yuki/status/1717731672815485016 made me think about the sorted ordering in [Section 5](https://tfpauly.github.io/draft-happy-eyeballs-v3/draft-pauly-v6ops-happy-eyeballs-v3.html#section-5-9) again and realized we should probably have a TCP IPv4 endpoint towards the beginning as well, just in case QUIC and IPv6 are both broken, however unlikely it may be. This is so that just in case both the protocol and address family are in fact impaired, the client doesn't have to wait a long time before it gets a good/working endpoint.",
       "createdAt": "2023-11-04T09:54:58Z",
-      "updatedAt": "2023-11-04T09:55:23Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2023-11-06T01:10:51Z",
+      "closedAt": "2023-11-06T01:10:51Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nidhijaju any chance you could translate that tweet to English for context please?",
+          "createdAt": "2023-11-05T11:29:52Z",
+          "updatedAt": "2023-11-05T11:29:52Z"
+        },
+        {
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The post is wondering which one is more likely to cause connection establishment failure, broken IPv6 networks or broken QUIC peers.",
+          "createdAt": "2023-11-05T11:49:59Z",
+          "updatedAt": "2023-11-05T11:49:59Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks!",
+          "createdAt": "2023-11-05T12:25:53Z",
+          "updatedAt": "2023-11-05T12:25:53Z"
+        }
+      ]
     },
     {
       "number": 32,
@@ -559,6 +581,22 @@
       "body": "This was dismissed on https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/18 but today I just found it in RFC6052. (I didn't notice this until now since i was only reading RFC7050 and RFC6146)\r\n\r\n```\r\n[3.1](https://datatracker.ietf.org/doc/html/rfc6052#section-3.1).  Restrictions on the Use of the Well-Known Prefix\r\n\r\n   The Well-Known Prefix MUST NOT be used to represent non-global IPv4\r\n   addresses, such as those defined in [[RFC1918](https://datatracker.ietf.org/doc/html/rfc1918)] or listed in Section 3\r\n   of [RFC5735].  Address translators MUST NOT translate packets in\r\n   which an address is composed of the Well-Known Prefix and a non-\r\n   global IPv4 address; they MUST drop these packets.\r\n```\r\n\r\nIf you think this part is not necessary because it is already documented here I understand, but I think it is very informational if it is in this document. (As I did not know this was a MUST NOT until today)",
       "createdAt": "2023-11-04T13:49:19Z",
       "updatedAt": "2023-11-04T13:49:19Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 34,
+      "id": "I_kwDOKH7CuM519Q3y",
+      "title": "Reference draft-ietf-6man-rfc6724-update",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/34",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "See: https://datatracker.ietf.org/doc/draft-ietf-6man-rfc6724-update/",
+      "createdAt": "2023-11-06T12:06:57Z",
+      "updatedAt": "2023-11-06T12:06:57Z",
       "closedAt": null,
       "comments": []
     }
@@ -2156,26 +2194,42 @@
       "id": "PR_kwDOKH7CuM5el64b",
       "title": "Move up the last Protocol Combination while sorting endpoints",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/31",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nidhijaju",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This suggests moving up the first TCP IPv4 endpoint as well in the sorted list.\r\n\r\nFixes https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/30.",
       "createdAt": "2023-11-04T09:57:51Z",
-      "updatedAt": "2023-11-04T09:57:51Z",
+      "updatedAt": "2023-11-06T01:10:51Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "10e6501b99e548af0f9d637f1a941f661baa3fb9",
       "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
       "headRefName": "sort-order",
       "headRefOid": "1000af83b06ba82a8270bfdf5a7849132fed39cf",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2023-11-06T01:10:50Z",
+      "mergedAt": "2023-11-06T01:10:50Z",
+      "mergedBy": "nidhijaju",
+      "mergeCommit": {
+        "oid": "a120bd4a4ea0325659bf35835c02ce7ac6a766cd"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5mKTF6",
+          "commit": {
+            "abbreviatedOid": "1000af8"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-11-05T12:26:28Z",
+          "updatedAt": "2023-11-05T12:26:28Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 33,
@@ -2189,13 +2243,13 @@
       "labels": [],
       "body": "closes #32 \r\n\r\n",
       "createdAt": "2023-11-04T13:50:59Z",
-      "updatedAt": "2023-11-04T13:54:11Z",
+      "updatedAt": "2023-11-06T16:53:18Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
-      "baseRefOid": "10e6501b99e548af0f9d637f1a941f661baa3fb9",
+      "baseRefOid": "a120bd4a4ea0325659bf35835c02ce7ac6a766cd",
       "headRepository": "momoka0122y/draft-happy-eyeballs-v3",
       "headRefName": "patch-3",
-      "headRefOid": "815143c7b345ffcd99a3a04d24ca77a0023bdc0d",
+      "headRefOid": "90af2ef4f73a79c0874bbc411474960f470c4feb",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -2219,6 +2273,66 @@
               "body": "I also think this whole paragraph should be at the end of the section for readability.\r\n\r\nBe right before\r\n## Hostnames with Broken AAAA Records {#broken}",
               "createdAt": "2023-11-04T13:53:05Z",
               "updatedAt": "2023-11-04T13:53:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5mKOF5",
+          "commit": {
+            "abbreviatedOid": "815143c"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-05T10:21:11Z",
+          "updatedAt": "2023-11-05T10:21:11Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "If rfc6052 already says this, why is it relevant for HEv3?",
+              "createdAt": "2023-11-05T10:21:11Z",
+              "updatedAt": "2023-11-05T10:21:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5mKQgt",
+          "commit": {
+            "abbreviatedOid": "815143c"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-05T11:24:28Z",
+          "updatedAt": "2023-11-05T11:24:28Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I think it makes sense to point out the NAT requirement to tell the clients to not bother. I'd phrase it something like this:\r\n\r\n> Similarly, there are additional restrictions on the use of the well-known NAT64 prefix (see Section 3.1 of RFC 6052) so clients can skip NAT64 address synthesis in such cases that will be rejected by the NAT64 translator.",
+              "createdAt": "2023-11-05T11:24:28Z",
+              "updatedAt": "2023-11-05T11:24:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5mQ5nC",
+          "commit": {
+            "abbreviatedOid": "815143c"
+          },
+          "author": "momoka0122y",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-06T16:53:18Z",
+          "updatedAt": "2023-11-06T16:53:18Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Great. Thank you. That text is better as we are talking of client implementation.\r\nIf moving the text down also seems reasonable please merge ;)",
+              "createdAt": "2023-11-06T16:53:18Z",
+              "updatedAt": "2023-11-06T16:53:19Z"
             }
           ]
         }
