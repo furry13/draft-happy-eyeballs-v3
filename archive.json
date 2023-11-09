@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-11-07T00:18:19.127922+00:00",
+  "timestamp": "2023-11-09T00:18:20.779075+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -597,6 +597,22 @@
       "body": "See: https://datatracker.ietf.org/doc/draft-ietf-6man-rfc6724-update/",
       "createdAt": "2023-11-06T12:06:57Z",
       "updatedAt": "2023-11-06T12:06:57Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 35,
+      "id": "I_kwDOKH7CuM52FuUi",
+      "title": "Why is TCP IPv6 preferred over QUIC IPv4",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/35",
+      "state": "OPEN",
+      "author": "sukunrt",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft says: \r\n\r\n> For example, if the first address in the sorted list is a QUIC IPv6 address, then the first TCP IPv6 address should be moved up in the list to be second in the list, then the first QUIC IPv4 address should be moved up to be third in the list, \r\n\r\n1. Why is TCP IPv6 preferred over QUIC IPv4? Does this also mean that the dial delay to misconfigured IPv6 servers with a fixed delay is 500ms now? \r\n\r\n2. What happens when there's only a QUIC IPv4 and TCP IPv6 address. I assume the preference is QUIC IPv4 over TCP IPv6, as the draft says. I understand, this ia a highly unusual situation.\r\n\r\n> The client SHOULD also sort the addresses in protocol order, such that QUIC is prioritized over TCP, as it connects faster and generally results in a better experience once connected.\r\n\r\n",
+      "createdAt": "2023-11-07T12:13:51Z",
+      "updatedAt": "2023-11-07T12:13:51Z",
       "closedAt": null,
       "comments": []
     }
@@ -2243,7 +2259,7 @@
       "labels": [],
       "body": "closes #32 \r\n\r\n",
       "createdAt": "2023-11-04T13:50:59Z",
-      "updatedAt": "2023-11-06T16:53:18Z",
+      "updatedAt": "2023-11-07T08:57:59Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "a120bd4a4ea0325659bf35835c02ce7ac6a766cd",
@@ -2333,6 +2349,38 @@
               "body": "Great. Thank you. That text is better as we are talking of client implementation.\r\nIf moving the text down also seems reasonable please merge ;)",
               "createdAt": "2023-11-06T16:53:18Z",
               "updatedAt": "2023-11-06T16:53:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5mWShM",
+          "commit": {
+            "abbreviatedOid": "90af2ef"
+          },
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-11-07T08:44:23Z",
+          "updatedAt": "2023-11-07T08:57:59Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "Not sure I fully understand the motivation for moving this down, but we can rearrange later editorially.",
+              "createdAt": "2023-11-07T08:44:24Z",
+              "updatedAt": "2023-11-07T08:57:59Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "Style nit: This probably needs to wrap with the rest of the document (this is superseded by the suggested comment, though, so no worries).",
+              "createdAt": "2023-11-07T08:45:22Z",
+              "updatedAt": "2023-11-07T08:57:59Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "I know this wording came from a previous comment, but perhaps something that would convey just the necessary bits would be something like: \r\n\r\n```suggestion\r\nNote that some IPv4 prefixes are scoped to a given host or network, such as\r\n0.0.0.0/8, 127.0.0.0/8, 169.254.0.0/16, and 255.255.255.255/32, and there are \r\nadditional restrictions on the use of the well-known NAT64 prefix (see \r\n{{Section 3.1 of !RFC6052}}), therefore NAT64 address synthesis might not be required.\r\n```",
+              "createdAt": "2023-11-07T08:57:17Z",
+              "updatedAt": "2023-11-07T09:08:06Z"
             }
           ]
         }
