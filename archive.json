@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-11-14T00:18:25.038547+00:00",
+  "timestamp": "2023-11-16T00:19:01.720540+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -613,6 +613,46 @@
       "body": "The draft says: \r\n\r\n> For example, if the first address in the sorted list is a QUIC IPv6 address, then the first TCP IPv6 address should be moved up in the list to be second in the list, then the first QUIC IPv4 address should be moved up to be third in the list, \r\n\r\n1. Why is TCP IPv6 preferred over QUIC IPv4? Does this also mean that the dial delay to misconfigured IPv6 servers with a fixed delay is 500ms now? \r\n\r\n2. What happens when there's only a QUIC IPv4 and TCP IPv6 address. I assume the preference is QUIC IPv4 over TCP IPv6, as the draft says. I understand, this ia a highly unusual situation.\r\n\r\n> The client SHOULD also sort the addresses in protocol order, such that QUIC is prioritized over TCP, as it connects faster and generally results in a better experience once connected.\r\n\r\n",
       "createdAt": "2023-11-07T12:13:51Z",
       "updatedAt": "2023-11-07T12:13:51Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 36,
+      "id": "I_kwDOKH7CuM52058U",
+      "title": "Remove hint-only addresses after receiving A/AAAA",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/36",
+      "state": "OPEN",
+      "author": "ericorth",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Something that I think deserves a bit more discussion in the draft...\r\n\r\nWhen HTTPS with IPv6 hints is received before A/AAAA, the draft specifies to start connection attempts based on those hints.  Absolutely the correct thing to do.\r\n\r\nBut I don't see any real discussion of what to do when A/AAAA is subsequently received with different addresses before connection succeeds, especially for the case where the hint addresses are not present.  Because A/AAAA addresses are generally better than hint addresses (because it's easier for the server to provide optimized or load-balanced addresses), I believe the best behavior would be to remove hint-only addresses from the connection list, similar to other removals discussed in Section 7 (\"DNS Answer Changes During Happy Eyeballs Connection Setup\").  Removing the addresses in this case would also be most consistent with the RFC9460#7.3 \"SHOULD\" to ignore hints if A/AAAA are locally available.",
+      "createdAt": "2023-11-14T21:10:19Z",
+      "updatedAt": "2023-11-14T21:49:32Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "body": "Yes, this is a very good point. We should clarify that the A/AAAA responses will replace any hints if they are different.",
+          "createdAt": "2023-11-14T21:49:32Z",
+          "updatedAt": "2023-11-14T21:49:32Z"
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "I_kwDOKH7CuM521BWM",
+      "title": "\"AAAA response\" is ambiguous",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/37",
+      "state": "OPEN",
+      "author": "ericorth",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "In the context of this draft \"AAAA response\" seems it could be interpreted as just the DNS response to the AAAA query.  But for most of the usage/discussion, I think we want AAAA records received in response to the AAAA query or AAAA records received in the Additional section of the response to the HTTPS query, whichever is received first.\r\n\r\nMaybe we should rephrase all those references to \"received AAAA records\" or something like that.  Maybe we even need an explicit mention that those records could come in the response to the HTTPS query and that clients should use those if received first instead of waiting for a response to the AAAA query.",
+      "createdAt": "2023-11-14T21:34:08Z",
+      "updatedAt": "2023-11-14T21:34:08Z",
       "closedAt": null,
       "comments": []
     }
