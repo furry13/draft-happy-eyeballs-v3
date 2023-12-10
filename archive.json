@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-07T00:19:12.048033+00:00",
+  "timestamp": "2023-12-10T00:21:09.474187+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -628,7 +628,7 @@
       "labels": [],
       "body": "Something that I think deserves a bit more discussion in the draft...\r\n\r\nWhen HTTPS with IPv6 hints is received before A/AAAA, the draft specifies to start connection attempts based on those hints.  Absolutely the correct thing to do.\r\n\r\nBut I don't see any real discussion of what to do when A/AAAA is subsequently received with different addresses before connection succeeds, especially for the case where the hint addresses are not present.  Because A/AAAA addresses are generally better than hint addresses (because it's easier for the server to provide optimized or load-balanced addresses), I believe the best behavior would be to remove hint-only addresses from the connection list, similar to other removals discussed in Section 7 (\"DNS Answer Changes During Happy Eyeballs Connection Setup\").  Removing the addresses in this case would also be most consistent with the RFC9460#7.3 \"SHOULD\" to ignore hints if A/AAAA are locally available.",
       "createdAt": "2023-11-14T21:10:19Z",
-      "updatedAt": "2023-11-14T21:49:32Z",
+      "updatedAt": "2023-12-09T06:08:01Z",
       "closedAt": null,
       "comments": [
         {
@@ -637,6 +637,13 @@
           "body": "Yes, this is a very good point. We should clarify that the A/AAAA responses will replace any hints if they are different.",
           "createdAt": "2023-11-14T21:49:32Z",
           "updatedAt": "2023-11-14T21:49:32Z"
+        },
+        {
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "body": "If you already had a connection attempt partway through succeeding to an ipv6hint (perhaps at some later point during the handshakes that are necessary), are we really going to cancel that if we get back AAAA responses that don't include that address?",
+          "createdAt": "2023-12-09T06:08:01Z",
+          "updatedAt": "2023-12-09T06:08:01Z"
         }
       ]
     },
