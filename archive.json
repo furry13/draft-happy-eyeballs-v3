@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-10T00:21:09.474187+00:00",
+  "timestamp": "2023-12-12T00:19:26.885585+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -628,7 +628,7 @@
       "labels": [],
       "body": "Something that I think deserves a bit more discussion in the draft...\r\n\r\nWhen HTTPS with IPv6 hints is received before A/AAAA, the draft specifies to start connection attempts based on those hints.  Absolutely the correct thing to do.\r\n\r\nBut I don't see any real discussion of what to do when A/AAAA is subsequently received with different addresses before connection succeeds, especially for the case where the hint addresses are not present.  Because A/AAAA addresses are generally better than hint addresses (because it's easier for the server to provide optimized or load-balanced addresses), I believe the best behavior would be to remove hint-only addresses from the connection list, similar to other removals discussed in Section 7 (\"DNS Answer Changes During Happy Eyeballs Connection Setup\").  Removing the addresses in this case would also be most consistent with the RFC9460#7.3 \"SHOULD\" to ignore hints if A/AAAA are locally available.",
       "createdAt": "2023-11-14T21:10:19Z",
-      "updatedAt": "2023-12-09T06:08:01Z",
+      "updatedAt": "2023-12-11T22:53:47Z",
       "closedAt": null,
       "comments": [
         {
@@ -644,6 +644,20 @@
           "body": "If you already had a connection attempt partway through succeeding to an ipv6hint (perhaps at some later point during the handshakes that are necessary), are we really going to cancel that if we get back AAAA responses that don't include that address?",
           "createdAt": "2023-12-09T06:08:01Z",
           "updatedAt": "2023-12-09T06:08:01Z"
+        },
+        {
+          "author": "ericorth",
+          "authorAssociation": "NONE",
+          "body": "In general, no.  Once you've started attempting a connection to an address, you continue that attempt and use the connection if it succeeds.  But if the attempt fails, for the next connection attempt, you use the updated list with hint-only addresses removed.\r\n\r\nThis procedure is consistent with the language already in Section 7 of the draft:\r\n\r\n> If an address is removed from the list that already had a connection attempt started, the connection attempt SHOULD NOT be canceled, but rather be allowed to continue. If the removed address had not yet had a connection attempt started, it SHOULD be removed from the list of addresses to try.",
+          "createdAt": "2023-12-11T17:48:07Z",
+          "updatedAt": "2023-12-11T17:48:07Z"
+        },
+        {
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "body": "Excellent, that's much more consistent with what's already in the doc and what's generally done in practice.",
+          "createdAt": "2023-12-11T22:53:45Z",
+          "updatedAt": "2023-12-11T22:53:45Z"
         }
       ]
     },
