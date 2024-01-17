@@ -21,7 +21,7 @@ requirements for algorithms that reduce this user-visible delay and
 provides an example algorithm, referred to as "Happy Eyeballs". This
 document updates the algorithm description in RFC 8305. 
     ' name="description">
-<meta content="xml2rfc 3.18.2" name="generator">
+<meta content="xml2rfc 3.19.0" name="generator">
 <meta content="ipv6" name="keyword">
 <meta content="ipv4" name="keyword">
 <meta content="racing" name="keyword">
@@ -31,20 +31,20 @@ document updates the algorithm description in RFC 8305.
 <meta content="ech" name="keyword">
 <meta content="draft-pauly-v6ops-happy-eyeballs-v3-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.2
+  xml2rfc 3.19.0
     Python 3.11.6
-    ConfigArgParse 1.5.3
+    ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 3.11.0
+    platformdirs 4.1.0
     pycountry 22.3.5
-    PyYAML 6.0
+    PyYAML 6.0.1
     requests 2.31.0
-    setuptools 67.7.2
+    setuptools 68.2.2
     six 1.16.0
-    wcwidth 0.2.9
+    wcwidth 0.2.12
 -->
 <link href="draft-pauly-v6ops-happy-eyeballs-v3.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1043,11 +1043,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Happy Eyeballs v3</td>
-<td class="right">November 2023</td>
+<td class="right">January 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Pauly, et al.</td>
-<td class="center">Expires 10 May 2024</td>
+<td class="center">Expires 20 July 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1060,12 +1060,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-pauly-v6ops-happy-eyeballs-v3-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-11-07" class="published">7 November 2023</time>
+<time datetime="2024-01-17" class="published">17 January 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-10">10 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-07-20">20 July 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1131,7 +1131,7 @@ document updates the algorithm description in RFC 8305.<a href="#section-abstrac
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1140,7 +1140,7 @@ document updates the algorithm description in RFC 8305.<a href="#section-abstrac
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2023 IETF Trust and the persons identified as the
+            Copyright (c) 2024 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1643,7 +1643,11 @@ in <span><a href="https://rfc-editor.org/rfc/rfc9460#section-9.3" class="relref"
 change by either adding resolved addresses (for example due to DNS
 push notifications <span>[<a href="#RFC8765" class="cite xref">RFC8765</a>]</span>) or removing previously resolved
 addresses (for example, due to expiry of the TTL on that DNS record),
-the client should react based on its current progress.<a href="#section-7-1" class="pilcrow">¶</a></p>
+the client should react based on its current progress. Additionally,
+once A and AAAA records are received, addresses received via SVCB
+hints that are not included in the A and AAAA records for the
+corresponding address family <span class="bcp14">SHOULD</span> be removed from the list, as
+specified in <span><a href="https://rfc-editor.org/rfc/rfc9460#section-7.3" class="relref">Section 7.3</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">If an address is removed from the list that already had a connection
 attempt started, the connection attempt <span class="bcp14">SHOULD NOT</span> be canceled, but
 rather be allowed to continue. If the removed address had not yet
