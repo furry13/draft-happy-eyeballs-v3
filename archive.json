@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-16T00:19:24.581494+00:00",
+  "timestamp": "2024-01-18T00:19:23.566352+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -621,15 +621,15 @@
       "id": "I_kwDOKH7CuM52058U",
       "title": "Remove hint-only addresses after receiving A/AAAA",
       "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/36",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "ericorth",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Something that I think deserves a bit more discussion in the draft...\r\n\r\nWhen HTTPS with IPv6 hints is received before A/AAAA, the draft specifies to start connection attempts based on those hints.  Absolutely the correct thing to do.\r\n\r\nBut I don't see any real discussion of what to do when A/AAAA is subsequently received with different addresses before connection succeeds, especially for the case where the hint addresses are not present.  Because A/AAAA addresses are generally better than hint addresses (because it's easier for the server to provide optimized or load-balanced addresses), I believe the best behavior would be to remove hint-only addresses from the connection list, similar to other removals discussed in Section 7 (\"DNS Answer Changes During Happy Eyeballs Connection Setup\").  Removing the addresses in this case would also be most consistent with the RFC9460#7.3 \"SHOULD\" to ignore hints if A/AAAA are locally available.",
       "createdAt": "2023-11-14T21:10:19Z",
-      "updatedAt": "2023-12-11T22:53:47Z",
-      "closedAt": null,
+      "updatedAt": "2024-01-17T14:01:17Z",
+      "closedAt": "2024-01-17T14:01:17Z",
       "comments": [
         {
           "author": "tfpauly",
@@ -2444,6 +2444,142 @@
               "updatedAt": "2023-11-07T09:08:06Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOKH7CuM5kJC9b",
+      "title": "Remove hint-only addresses after receiving A/AAAA",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/38",
+      "state": "MERGED",
+      "author": "nidhijaju",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/36.",
+      "createdAt": "2024-01-16T04:12:56Z",
+      "updatedAt": "2024-01-17T16:55:00Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "3c7c5fee5a1087435ac96b16b3aea98383eb15cb",
+      "headRepository": "nidhijaju/draft-happy-eyeballs-v3",
+      "headRefName": "remove-hint-only-addresses",
+      "headRefOid": "98512377ee9438fe7e262b8fa6dd8de5721c9ae1",
+      "closedAt": "2024-01-17T14:01:16Z",
+      "mergedAt": "2024-01-17T14:01:16Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "dec12baf59ab9a25c421dbdc9d7545dd466d6420"
+      },
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "LGTM",
+          "createdAt": "2024-01-17T16:54:59Z",
+          "updatedAt": "2024-01-17T16:54:59Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5suoJ1",
+          "commit": {
+            "abbreviatedOid": "4e6da29"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-16T16:51:28Z",
+          "updatedAt": "2024-01-16T16:52:11Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nonce A and AAAA records are received, addresses received via SVCB hints\r\n```",
+              "createdAt": "2024-01-16T16:51:29Z",
+              "updatedAt": "2024-01-17T14:00:01Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "Should we say that they get _replaced_ by the A/AAAA answers? If they are the same answers, then we don't want to remove and not re-add, of course.",
+              "createdAt": "2024-01-16T16:52:08Z",
+              "updatedAt": "2024-01-16T16:52:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5s2kDs",
+          "commit": {
+            "abbreviatedOid": "4e6da29"
+          },
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-17T01:41:17Z",
+          "updatedAt": "2024-01-17T01:41:17Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "I guess you meant \"once\"?",
+              "createdAt": "2024-01-17T01:41:17Z",
+              "updatedAt": "2024-01-17T01:41:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5s2lEn",
+          "commit": {
+            "abbreviatedOid": "4e6da29"
+          },
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-17T01:42:58Z",
+          "updatedAt": "2024-01-17T01:42:58Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "I updated the wording a little to clarify we only remove the addresses that are hint-only. What do you think?",
+              "createdAt": "2024-01-17T01:42:58Z",
+              "updatedAt": "2024-01-17T01:42:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5s611U",
+          "commit": {
+            "abbreviatedOid": "9851237"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-17T14:00:14Z",
+          "updatedAt": "2024-01-17T14:00:14Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Yes, fixed \ud83e\udd26\ud83c\udffb\u200d\u2642\ufe0f",
+              "createdAt": "2024-01-17T14:00:14Z",
+              "updatedAt": "2024-01-17T14:00:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKH7CuM5s62U8",
+          "commit": {
+            "abbreviatedOid": "9851237"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Looks good!",
+          "createdAt": "2024-01-17T14:01:08Z",
+          "updatedAt": "2024-01-17T14:01:09Z",
+          "comments": []
         }
       ]
     }
