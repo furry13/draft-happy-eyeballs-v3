@@ -21,7 +21,7 @@ requirements for algorithms that reduce this user-visible delay and
 provides an example algorithm, referred to as "Happy Eyeballs". This
 document updates the algorithm description in RFC 8305. 
     ' name="description">
-<meta content="xml2rfc 3.19.0" name="generator">
+<meta content="xml2rfc 3.19.1" name="generator">
 <meta content="ipv6" name="keyword">
 <meta content="ipv4" name="keyword">
 <meta content="racing" name="keyword">
@@ -31,7 +31,7 @@ document updates the algorithm description in RFC 8305.
 <meta content="ech" name="keyword">
 <meta content="draft-pauly-v6ops-happy-eyeballs-v3-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.19.0
+  xml2rfc 3.19.1
     Python 3.11.6
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -44,7 +44,7 @@ document updates the algorithm description in RFC 8305.
     requests 2.31.0
     setuptools 68.2.2
     six 1.16.0
-    wcwidth 0.2.12
+    wcwidth 0.2.13
 -->
 <link href="draft-pauly-v6ops-happy-eyeballs-v3.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1047,7 +1047,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Pauly, et al.</td>
-<td class="center">Expires 20 July 2024</td>
+<td class="center">Expires 29 July 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1060,12 +1060,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-pauly-v6ops-happy-eyeballs-v3-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-01-17" class="published">17 January 2024</time>
+<time datetime="2024-01-26" class="published">26 January 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-07-20">20 July 2024</time></dd>
+<dd class="expires"><time datetime="2024-07-29">29 July 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1131,7 +1131,7 @@ document updates the algorithm description in RFC 8305.<a href="#section-abstrac
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1537,69 +1537,73 @@ sorted according to that SVCB RR's priority.<a href="#section-5.1-3" class="pilc
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-connection-attempts" class="section-name selfRef">Connection Attempts</a>
       </h2>
 <p id="section-6-1">Once the list of addresses received up to this point has been
-constructed, the client will attempt to make connections. In order
-to avoid unreasonable network load, connection attempts <span class="bcp14">SHOULD NOT</span> be
+constructed, the client will attempt to make connections. In order to
+avoid unreasonable network load, connection attempts <span class="bcp14">SHOULD NOT</span> be
 made simultaneously. Instead, one connection attempt to a single
-address is started first, followed by the others in the list, one at
-a time. Starting a new connection attempt does not affect previous
-attempts, as multiple connection attempts may occur in parallel.
-Once one of the connection attempts succeeds (<a href="#success" class="auto internal xref">Section 6.1</a>), all other
+address is started first, followed by the others in the list, one at a
+time. Starting a new connection attempt does not affect previous
+attempts, as multiple connection attempts may occur in parallel.  Once
+one of the connection attempts succeeds (<a href="#success" class="auto internal xref">Section 6.1</a>), all other
 connections attempts that have not yet succeeded <span class="bcp14">SHOULD</span> be canceled.
-Any address that was not yet attempted as a connection <span class="bcp14">SHOULD</span> be ignored.
-At that time, the asynchronous DNS query <span class="bcp14">MAY</span> be canceled as new addresses
-will not be used for this connection. However, the DNS client resolver
-<span class="bcp14">SHOULD</span> still process DNS replies from the network for a short period of
-time (recommended to be 1 second), as they will populate the DNS cache
-and can be used for subsequent connections.<a href="#section-6-1" class="pilcrow">¶</a></p>
+Any address that was not yet attempted as a connection <span class="bcp14">SHOULD</span> be
+ignored.  At that time, the asynchronous DNS query <span class="bcp14">MAY</span> be canceled as
+new addresses will not be used for this connection. However, the DNS
+client resolver <span class="bcp14">SHOULD</span> still process DNS replies from the network for
+a short period of time (recommended to be 1 second), as they will
+populate the DNS cache and can be used for subsequent connections.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">A simple implementation can have a fixed delay for how long to wait
-before starting the next connection attempt. This delay is referred
-to as the "Connection Attempt Delay". One recommended value for a
-default delay is 250 milliseconds. A more nuanced implementation's
-delay should correspond to the time when the previous attempt is
-retrying its handshake (such as sending a second TCP SYN or a second
-QUIC Initial), based on the retransmission timer (<span>[<a href="#RFC6298" class="cite xref">RFC6298</a>]</span>,
+before starting the next connection attempt. This delay is referred to
+as the "Connection Attempt Delay". One recommended value for a default
+delay is 250 milliseconds. A more nuanced implementation's delay
+should correspond to the time when the previous attempt is retrying
+its handshake (such as sending a second TCP SYN or a second QUIC
+Initial), based on the retransmission timer (<span>[<a href="#RFC6298" class="cite xref">RFC6298</a>]</span>,
 <span>[<a href="#RFC9002" class="cite xref">RFC9002</a>]</span>). If the client has historical RTT data gathered from
 other connections to the same host or prefix, it can use this
 information to influence its delay. Note that this algorithm should
-only try to approximate the time of the first handshake packet retransmission, and
-not any further retransmissions that may be influenced by exponential
-timer back off.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">The Connection Attempt Delay <span class="bcp14">MUST</span> have a lower bound, especially if
-it is computed using historical data. More specifically, a
-subsequent connection <span class="bcp14">MUST NOT</span> be started within 10 milliseconds of
-the previous attempt. The recommended minimum value is 100
-milliseconds, which is referred to as the "Minimum Connection Attempt
-Delay". This minimum value is required to avoid congestion collapse
-in the presence of high packet-loss rates. The Connection Attempt
-Delay <span class="bcp14">SHOULD</span> have an upper bound, referred to as the "Maximum
-Connection Attempt Delay". The current recommended value is 2
-seconds.<a href="#section-6-3" class="pilcrow">¶</a></p>
+only try to approximate the time of the first handshake packet
+retransmission, and not any further retransmissions that may be
+influenced by exponential timer back off.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The Connection Attempt Delay <span class="bcp14">MUST</span> have a lower bound, especially if it
+is computed using historical data. More specifically, a subsequent
+connection <span class="bcp14">MUST NOT</span> be started within 10 milliseconds of the previous
+attempt. The recommended minimum value is 100 milliseconds, which is
+referred to as the "Minimum Connection Attempt Delay". This minimum
+value is required to avoid congestion collapse in the presence of high
+packet-loss rates. The Connection Attempt Delay <span class="bcp14">SHOULD</span> have an upper
+bound, referred to as the "Maximum Connection Attempt Delay". The
+current recommended value is 2 seconds.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <div id="success">
 <section id="section-6.1">
         <h3 id="name-determining-successful-conn">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-determining-successful-conn" class="section-name selfRef">Determining successful connection establishment</a>
         </h3>
-<p id="section-6.1-1">The determination of when a connection attempt has successfully completed
-(and other attempts can be cancelled) depends on the protocols being used
-to establish a connection. This can involve one or more protocol handshakes.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">Client connections that use TCP only (without TLS or another protocol on top, such
-as for unencrypted HTTP connections) will determine successful establishment based
-on completing the TCP handshake only. When TLS is used on top of of TCP (such
-as for encrypted HTTP connections), clients <span class="bcp14">MAY</span> choose to wait for the TLS handshake to
-successfully complete before cancelling other connection attempts. This is particularly
-useful for networks in which a TCP-terminating proxy might be causing TCP handshakes
-to succeed quickly, even though end-to-end connectivity with the TLS-terminating
-server will fail. QUIC connections inherently include a secure handshake in their main
-handshakes, and thus only need to wait for a single handshake to complete.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.1-3">While transport layer handshakes generally do not have restrictions on attempts
-to establish a connection, some cryptographic handshakes may be dependent on
-ServiceMode SVCB RRs and could impose limitations on establishing a connection.
-For instance, ECH-capable clients may become SVCB-reliant clients
-(<span><a href="https://rfc-editor.org/rfc/rfc9460#section-3" class="relref">Section 3</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span>) when SVCB RRs contain the
-"ech" SvcParamKey <span>[<a href="#ECH" class="cite xref">ECH</a>]</span>. If the client is either an SVCB-reliant client or a
-SVCB-optional client that might switch to SVCB-reliant connection
-establishment during the process, the client <span class="bcp14">MUST</span> wait for SVCB RRs before
-proceeding with the cryptographic handshake.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-1">The determination of when a connection attempt has successfully
+completed (and other attempts can be cancelled) depends on the
+protocols being used to establish a connection. This can involve one
+or more protocol handshakes.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">Client connections that use TCP only (without TLS or another protocol
+on top, such as for unencrypted HTTP connections) will determine
+successful establishment based on completing the TCP handshake
+only. When TLS is used on top of of TCP (such as for encrypted HTTP
+connections), clients <span class="bcp14">MAY</span> choose to wait for the TLS handshake to
+successfully complete before cancelling other connection
+attempts. This is particularly useful for networks in which a
+TCP-terminating proxy might be causing TCP handshakes to succeed
+quickly, even though end-to-end connectivity with the TLS-terminating
+server will fail. QUIC connections inherently include a secure
+handshake in their main handshakes, and thus only need to wait for a
+single handshake to complete.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">While transport layer handshakes generally do not have restrictions on
+attempts to establish a connection, some cryptographic handshakes may
+be dependent on ServiceMode SVCB RRs and could impose limitations on
+establishing a connection.  For instance, ECH-capable clients may
+become SVCB-reliant clients (<span><a href="https://rfc-editor.org/rfc/rfc9460#section-3" class="relref">Section 3</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span>) when SVCB RRs
+contain the "ech" SvcParamKey <span>[<a href="#ECH" class="cite xref">ECH</a>]</span>. If the
+client is either an SVCB-reliant client or a SVCB-optional client that
+might switch to SVCB-reliant connection establishment during the
+process, the client <span class="bcp14">MUST</span> wait for SVCB RRs before proceeding with the
+cryptographic handshake.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="handling-application-layer-protocol-negotiation-alpn">
@@ -1608,14 +1612,14 @@ proceeding with the cryptographic handshake.<a href="#section-6.1-3" class="pilc
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-handling-application-layer-" class="section-name selfRef">Handling Application Layer Protocol Negotiation (ALPN)</a>
         </h3>
 <p id="section-6.2-1">The <code>alpn</code> and <code>no-default-alpn</code> SvcParamKeys in SVCB RRs indicate the
-"SVCB ALPN set," which specifies the underlying transport protocols supported
-by the associated service endpoint. When the client requests SVCB RRs, it
-<span class="bcp14">SHOULD</span> perform the procedure specified in <span><a href="https://rfc-editor.org/rfc/rfc9460#section-7.1.2" class="relref">Section 7.1.2</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span> to determine
-the underlying transport protocols that both the client and the service endpoint
-support. The client <span class="bcp14">SHOULD NOT</span> attempt to make a connection to a service
-endpoint whose SVCB ALPN set does not contain any protocols that the client
-supports. For example, suppose the client is an HTTP client that only supports
-TCP-based versions such as HTTP/1.1 and HTTP/2, and it receives the following
+"SVCB ALPN set," which specifies the underlying transport protocols
+supported by the associated service endpoint. When the client requests
+SVCB RRs, it <span class="bcp14">SHOULD</span> perform the procedure specified in <span><a href="https://rfc-editor.org/rfc/rfc9460#section-7.1.2" class="relref">Section 7.1.2</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span> to determine the underlying transport protocols that both
+the client and the service endpoint support. The client <span class="bcp14">SHOULD NOT</span>
+attempt to make a connection to a service endpoint whose SVCB ALPN set
+does not contain any protocols that the client supports. For example,
+suppose the client is an HTTP client that only supports TCP-based
+versions such as HTTP/1.1 and HTTP/2, and it receives the following
 HTTPS RR:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6.2-2">
 <pre>
@@ -1623,13 +1627,14 @@ HTTPS RR:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
      alpn="h3" no-default-alpn ipv6hint=2001:db8::2 )
 </pre><a href="#section-6.2-2" class="pilcrow">¶</a>
 </div>
-<p id="section-6.2-3">In this case, attempting a connection to 2001:db8::2 or any other address resolved
-for <code>svc1.example.com</code> would be incorrect because the RR indicates that
-<code>svc1.example.com</code> only supports HTTP/3, based on the ALPN value of "h3".<a href="#section-6.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.2-4">If the client is an HTTP client that supports both Alt-Svc <span>[<a href="#AltSvc" class="cite xref">AltSvc</a>]</span>
-and SVCB (HTTPS) RRs, the client <span class="bcp14">SHOULD</span> ensure that connection attempts are
-consistent with both the Alt-Svc parameters and the SVCB ALPN set, as specified
-in <span><a href="https://rfc-editor.org/rfc/rfc9460#section-9.3" class="relref">Section 9.3</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span>.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">In this case, attempting a connection to 2001:db8::2 or any other
+address resolved for <code>svc1.example.com</code> would be incorrect because the
+RR indicates that <code>svc1.example.com</code> only supports HTTP/3, based on
+the ALPN value of "h3".<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2-4">If the client is an HTTP client that supports both Alt-Svc
+<span>[<a href="#AltSvc" class="cite xref">AltSvc</a>]</span> and SVCB (HTTPS) RRs, the client <span class="bcp14">SHOULD</span> ensure
+that connection attempts are consistent with both the Alt-Svc
+parameters and the SVCB ALPN set, as specified in <span><a href="https://rfc-editor.org/rfc/rfc9460#section-9.3" class="relref">Section 9.3</a> of [<a href="#SVCB" class="cite xref">SVCB</a>]</span>.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1966,7 +1971,7 @@ addresses.<a href="#section-11-1" class="pilcrow">¶</a></p>
 <dd class="break"></dd>
 <dt id="SVCB-ECH">[SVCB-ECH]</dt>
       <dd>
-<span class="refAuthor">Schwartz, B. M.</span>, <span class="refAuthor">Bishop, M.</span>, and <span class="refAuthor">E. Nygren</span>, <span class="refTitle">"Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-sbn-tls-svcb-ech-00</span>, <time datetime="2023-03-11" class="refDate">11 March 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-sbn-tls-svcb-ech-00">https://datatracker.ietf.org/doc/html/draft-sbn-tls-svcb-ech-00</a>&gt;</span>. </dd>
+<span class="refAuthor">Schwartz, B. M.</span>, <span class="refAuthor">Bishop, M.</span>, and <span class="refAuthor">E. Nygren</span>, <span class="refTitle">"Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-svcb-ech-00</span>, <time datetime="2023-09-26" class="refDate">26 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-svcb-ech-00">https://datatracker.ietf.org/doc/html/draft-ietf-tls-svcb-ech-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
