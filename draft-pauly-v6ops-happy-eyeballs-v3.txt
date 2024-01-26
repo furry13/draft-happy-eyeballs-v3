@@ -426,7 +426,7 @@ Table of Contents
    may be dependent on ServiceMode SVCB RRs and could impose limitations
    on establishing a connection.  For instance, ECH-capable clients may
    become SVCB-reliant clients (Section 3 of [SVCB]) when SVCB RRs
-   contain the "ech" SvcParamKey [ECH].  If the client is either an
+   contain the "ech" SvcParamKey [SVCB-ECH].  If the client is either an
    SVCB-reliant client or a SVCB-optional client that might switch to
    SVCB-reliant connection establishment during the process, the client
    MUST wait for SVCB RRs before proceeding with the cryptographic
