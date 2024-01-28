@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-25T00:20:01.038276+00:00",
+  "timestamp": "2024-01-28T00:20:05.998124+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -1338,7 +1338,7 @@
       "labels": [],
       "body": "Fixes #5.",
       "createdAt": "2023-10-14T06:16:47Z",
-      "updatedAt": "2023-10-18T23:39:30Z",
+      "updatedAt": "2024-01-26T00:45:16Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "ed7a3b844237071dcd2c8a2681f1e39a1b076ea7",
@@ -1484,7 +1484,7 @@
       "labels": [],
       "body": "To discuss how to handle SVCB-reliant clients such as ECH. Fixes #6.",
       "createdAt": "2023-10-15T06:12:45Z",
-      "updatedAt": "2023-10-18T23:47:07Z",
+      "updatedAt": "2024-01-26T00:45:15Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "f6e764b539bd00135b352d60ec7866d6304c85f9",
@@ -1780,7 +1780,7 @@
       "labels": [],
       "body": "In v3, connection establishment doesn't always mean TCP handshake. Rephrase some texts to reflect that.",
       "createdAt": "2023-10-20T09:02:16Z",
-      "updatedAt": "2023-10-20T10:51:15Z",
+      "updatedAt": "2024-01-26T00:45:14Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "a545fee16e0d5b499557ca00417c7dcce12a9fb2",
@@ -1821,7 +1821,7 @@
       "labels": [],
       "body": "Fixes #19.",
       "createdAt": "2023-10-31T05:25:07Z",
-      "updatedAt": "2023-10-31T23:05:20Z",
+      "updatedAt": "2024-01-26T00:45:11Z",
       "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
       "baseRefName": "main",
       "baseRefOid": "ac7338752ffe24ea52d128944897b3241d17d96b",
@@ -2579,6 +2579,63 @@
           "body": "Looks good!",
           "createdAt": "2024-01-17T14:01:08Z",
           "updatedAt": "2024-01-17T14:01:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOKH7CuM5lHk66",
+      "title": "Correct format and refer to draft-ietf-tls-svcb-ech",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/pull/39",
+      "state": "MERGED",
+      "author": "bashi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Applied Emacs' `M-x fill-region` for some paragraphs.",
+      "createdAt": "2024-01-26T00:51:02Z",
+      "updatedAt": "2024-01-27T11:37:54Z",
+      "baseRepository": "tfpauly/draft-happy-eyeballs-v3",
+      "baseRefName": "main",
+      "baseRefOid": "dec12baf59ab9a25c421dbdc9d7545dd466d6420",
+      "headRepository": "bashi/draft-happy-eyeballs-v3",
+      "headRefName": "format",
+      "headRefOid": "74a9971ae7143fd310774518395fe525f14415f6",
+      "closedAt": "2024-01-26T10:05:40Z",
+      "mergedAt": "2024-01-26T10:05:40Z",
+      "mergedBy": "nidhijaju",
+      "mergeCommit": {
+        "oid": "d791aab3abbb8ff6936ffdb72c3f4f3263d97021"
+      },
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks for doing this. Note that it introduced a bug in the references (format is `I-D.ietf-....` not `I-D.draft-ietf-...`) and exposed another bug where we were referencing ECH somewhere instead of SVCB-ECH. So I just fixed both in c8bcb7836308a4a9038bbad7aa2944a074dd76b7.",
+          "createdAt": "2024-01-26T21:43:36Z",
+          "updatedAt": "2024-01-26T21:43:36Z"
+        },
+        {
+          "author": "bashi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sorry for the trouble and thank you for the fix!",
+          "createdAt": "2024-01-27T11:37:53Z",
+          "updatedAt": "2024-01-27T11:37:53Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKH7CuM5t_teK",
+          "commit": {
+            "abbreviatedOid": "74a9971"
+          },
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-01-26T10:05:31Z",
+          "updatedAt": "2024-01-26T10:05:31Z",
           "comments": []
         }
       ]
