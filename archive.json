@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-03-12T00:18:12.030474+00:00",
+  "timestamp": "2024-03-14T00:18:03.455520+00:00",
   "repo": "tfpauly/draft-happy-eyeballs-v3",
   "labels": [
     {
@@ -676,6 +676,30 @@
       "updatedAt": "2023-11-14T21:34:08Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 40,
+      "id": "I_kwDOKH7CuM6B-Ut6",
+      "title": "Who can provide code implementation? Thank you",
+      "url": "https://github.com/tfpauly/draft-happy-eyeballs-v3/issues/40",
+      "state": "CLOSED",
+      "author": "chongzi",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "rt",
+      "createdAt": "2024-03-12T02:32:50Z",
+      "updatedAt": "2024-03-12T03:01:41Z",
+      "closedAt": "2024-03-12T03:01:40Z",
+      "comments": [
+        {
+          "author": "nidhijaju",
+          "authorAssociation": "COLLABORATOR",
+          "body": "AFAIK, Apple has been shipping an implementation of Happy Eyeballs with QUIC and SVCB for a couple years and Google Chrome is currently working on one too, but I'm not sure of others.",
+          "createdAt": "2024-03-12T03:01:40Z",
+          "updatedAt": "2024-03-12T03:01:40Z"
+        }
+      ]
     }
   ],
   "pulls": [
